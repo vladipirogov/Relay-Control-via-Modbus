@@ -1,0 +1,31 @@
+{
+  "deviceBoard": "Raspberry Pico W",
+  "communicationPort": "COM21",
+  "runtimeIpAddress": "192.168.1.104",
+  "compileOnly": false,
+  "communicationConfiguration": {
+    "modbusRTU": {
+      "rtuInterface": "Serial1",
+      "rtuBaudRate": "115200",
+      "rtuSlaveId": 10,
+      "rtuRS485ENPin": "3"
+    },
+    "modbusTCP": {
+      "tcpInterface": "Wi-Fi",
+      "tcpMacAddress": "DE:AD:BE:EF:DE:AD",
+      "tcpWifiSSID": "Keenetic-2919",
+      "tcpWifiPassword": "32w6BRSe",
+      "tcpStaticHostConfiguration": {
+        "ipAddress": "",
+        "dns": "",
+        "gateway": "",
+        "subnet": ""
+      }
+    },
+    "communicationPreferences": {
+      "enabledRTU": true,
+      "enabledTCP": true,
+      "enabledDHCP": true
+    }
+  }
+}

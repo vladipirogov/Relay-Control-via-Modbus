@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "name": "Demo-PLC-Pi",
+    "type": "plc-project"
+  },
+  "data": {
+    "dataTypes": [],
+    "pous": [],
+    "configuration": {
+      "resource": {
+        "tasks": [
+          {
+            "name": "task0",
+            "triggering": "Cyclic",
+            "interval": "T#20ms",
+            "priority": 1
+          }
+        ],
+        "instances": [
+          {
+            "name": "instance0",
+            "task": "task0",
+            "program": "main"
+          }
+        ],
+        "globalVariables": []
+      }
+    },
+    "remoteDevices": [
+      {
+        "name": "demo-device",
+        "protocol": "modbus-tcp"
+      }
+    ],
+    "debugVariables": {
+      "pous": {
+        "main": [
+          "BTN_ON_1",
+          "BTN_ON_1_TMP",
+          "BTN_ON_2",
+          "BTN_ON_2_TMP",
+          "K1",
+          "K2",
+          "BTN_OFF_1",
+          "BTN_OFF_1_TMP",
+          "BTN_OFF_2",
+          "BTN_OFF_2_TMP",
+          "CMD_WORD",
+          "CYRCLE_STATE"
+        ]
+      }
+    },
+    "deletedPous": [],
+    "deletedServers": [],
+    "deletedRemoteDevices": []
+  }
+}

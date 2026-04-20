@@ -1,0 +1,4 @@
+{
+  "name": "demo-device",
+  "protocol": "modbus-tcp"
+}

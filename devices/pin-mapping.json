@@ -1,0 +1,56 @@
+[
+  {
+    "pin": "6",
+    "pinType": "digitalInput",
+    "address": "%IX0.0",
+    "name": "TX1"
+  },
+  {
+    "pin": "7",
+    "pinType": "digitalInput",
+    "address": "%IX0.1",
+    "name": "RX1"
+  },
+  {
+    "pin": "8",
+    "pinType": "digitalInput",
+    "address": "%IX0.2",
+    "name": ""
+  },
+  {
+    "pin": "9",
+    "pinType": "digitalInput",
+    "address": "%IX0.3",
+    "name": "BTN_ON_1"
+  },
+  {
+    "pin": "10",
+    "pinType": "digitalInput",
+    "address": "%IX0.4",
+    "name": "BTN_OFF_1"
+  },
+  {
+    "pin": "11",
+    "pinType": "digitalInput",
+    "address": "%IX0.5",
+    "name": "BTN_ON_2"
+  },
+  {
+    "pin": "12",
+    "pinType": "digitalInput",
+    "address": "%IX0.6",
+    "name": "BTN_OFF_2"
+  },
+  {
+    "pin": "14",
+    "pinType": "digitalOutput",
+    "address": "%QX0.0",
+    "name": "OUT_1"
+  },
+  {
+    "pin": "15",
+    "pinType": "digitalOutput",
+    "address": "%QX0.1",
+    "name": "OUT_2"
+  }
+]
