@@ -33,7 +33,7 @@
 #define SAME_ENDIANNESS      0
 #define REVERSE_ENDIANNESS   1
 
-char plc_program_md5[] = "ab7ed9817961e97a46022e96f4f2a06e";
+char plc_program_md5[] = "8b3c025101f315a9484f232c3b1e6480";
 
 uint8_t endianness;
 
@@ -44,10 +44,25 @@ static const struct {
     void *ptr;
     __IEC_types_enum type;
 } debug_vars[] = {
+    {&(RES0__INSTANCE0.CAN_ERR), BOOL_ENUM},
+    {&(RES0__INSTANCE0.K1_CAN_ON), BOOL_ENUM},
+    {&(RES0__INSTANCE0.K2_CAN_ON), BOOL_ENUM},
+    {&(RES0__INSTANCE0.K1_CAN_OFF), BOOL_ENUM},
+    {&(RES0__INSTANCE0.K2_CAN_OFF), BOOL_ENUM},
     {&(RES0__INSTANCE0.BTN_ON_1_TMP), BOOL_ENUM},
     {&(RES0__INSTANCE0.BTN_ON_2_TMP), BOOL_ENUM},
     {&(RES0__INSTANCE0.BTN_OFF_1_TMP), BOOL_ENUM},
     {&(RES0__INSTANCE0.BTN_OFF_2_TMP), BOOL_ENUM},
+    {&(RES0__INSTANCE0.TON0_TMP_ON), BOOL_ENUM},
+    {&(RES0__INSTANCE0.TON1_TMP_ON), BOOL_ENUM},
+    {&(RES0__INSTANCE0.TON2_TMP_ON), BOOL_ENUM},
+    {&(RES0__INSTANCE0.TON3_TMP_ON), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CYCLE_RUN), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CYCLE_RUN_SET), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CMD_1), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CMD_2), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CMD_3), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CMD_4), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON0.EN), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON0.ENO), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON0.IN), BOOL_ENUM},
@@ -58,7 +73,6 @@ static const struct {
     {&(RES0__INSTANCE0.TON0.PREV_IN), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON0.CURRENT_TIME), TIME_ENUM},
     {&(RES0__INSTANCE0.TON0.START_TIME), TIME_ENUM},
-    {&(RES0__INSTANCE0.TON0_TMP_ON), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON1.EN), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON1.ENO), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON1.IN), BOOL_ENUM},
@@ -69,7 +83,6 @@ static const struct {
     {&(RES0__INSTANCE0.TON1.PREV_IN), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON1.CURRENT_TIME), TIME_ENUM},
     {&(RES0__INSTANCE0.TON1.START_TIME), TIME_ENUM},
-    {&(RES0__INSTANCE0.TON1_TMP_ON), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON2.EN), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON2.ENO), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON2.IN), BOOL_ENUM},
@@ -80,14 +93,6 @@ static const struct {
     {&(RES0__INSTANCE0.TON2.PREV_IN), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON2.CURRENT_TIME), TIME_ENUM},
     {&(RES0__INSTANCE0.TON2.START_TIME), TIME_ENUM},
-    {&(RES0__INSTANCE0.TON2_TMP_ON), BOOL_ENUM},
-    {&(RES0__INSTANCE0.TON3_TMP_ON), BOOL_ENUM},
-    {&(RES0__INSTANCE0.CYCLE_RUN), BOOL_ENUM},
-    {&(RES0__INSTANCE0.CYCLE_RUN_SET), BOOL_ENUM},
-    {&(RES0__INSTANCE0.CMD_1), BOOL_ENUM},
-    {&(RES0__INSTANCE0.CMD_2), BOOL_ENUM},
-    {&(RES0__INSTANCE0.CMD_3), BOOL_ENUM},
-    {&(RES0__INSTANCE0.CMD_4), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON3.EN), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON3.ENO), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON3.IN), BOOL_ENUM},
@@ -108,6 +113,36 @@ static const struct {
     {&(RES0__INSTANCE0.TON4.PREV_IN), BOOL_ENUM},
     {&(RES0__INSTANCE0.TON4.CURRENT_TIME), TIME_ENUM},
     {&(RES0__INSTANCE0.TON4.START_TIME), TIME_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.EN), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.ENO), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.ID_FILTER), INT_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.ID_STATE), INT_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.STATE_PERIOD), INT_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.INPUT_ADDRESS), INT_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.NUM_OF_INPUT), INT_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.OUTPUT_ADDRESS), INT_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.NUM_OF_OUTPUT), INT_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.ERR), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CAN_INTERFACE0.HASBEENINITIALIZED), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.EN), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.ENO), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN0), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN1), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN2), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN3), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN4), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN5), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN6), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN7), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN8), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN9), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN10), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN11), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN12), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN13), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN14), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.B_IN15), BOOL_ENUM},
+    {&(RES0__INSTANCE0.BOOL_ON_WORD0.WORD_OUT), WORD_ENUM},
     {&(RES0__INSTANCE0.BTN_ON_1), BOOL_P_ENUM},
     {&(RES0__INSTANCE0.BTN_ON_2), BOOL_P_ENUM},
     {&(RES0__INSTANCE0.K1), BOOL_O_ENUM},
@@ -116,10 +151,11 @@ static const struct {
     {&(RES0__INSTANCE0.BTN_OFF_2), BOOL_P_ENUM},
     {&(RES0__INSTANCE0.CMD_WORD), WORD_O_ENUM},
     {&(RES0__INSTANCE0.CYRCLE_STATE), WORD_O_ENUM},
-    {&(RES0__INSTANCE0._TMP_EQ3776762_ENO), BOOL_ENUM},
-    {&(RES0__INSTANCE0._TMP_EQ3776762_OUT), BOOL_ENUM},
-    {&(RES0__INSTANCE0._TMP_EQ3354236_ENO), BOOL_ENUM},
-    {&(RES0__INSTANCE0._TMP_EQ3354236_OUT), BOOL_ENUM},
+    {&(RES0__INSTANCE0.CAN_STATE), WORD_O_ENUM},
+    {&(RES0__INSTANCE0._TMP_EQ5689106_ENO), BOOL_ENUM},
+    {&(RES0__INSTANCE0._TMP_EQ5689106_OUT), BOOL_ENUM},
+    {&(RES0__INSTANCE0._TMP_EQ5766092_ENO), BOOL_ENUM},
+    {&(RES0__INSTANCE0._TMP_EQ5766092_OUT), BOOL_ENUM},
     {&(RES0__INSTANCE0._TMP_EQ5859957_ENO), BOOL_ENUM},
     {&(RES0__INSTANCE0._TMP_EQ5859957_OUT), BOOL_ENUM},
     {&(RES0__INSTANCE0._TMP_EQ5545463_ENO), BOOL_ENUM},
@@ -160,9 +196,19 @@ static const struct {
     {&(RES0__INSTANCE0.R_TRIG4.CLK), BOOL_ENUM},
     {&(RES0__INSTANCE0.R_TRIG4.Q), BOOL_ENUM},
     {&(RES0__INSTANCE0.R_TRIG4.M), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG5.EN), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG5.ENO), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG5.CLK), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG5.Q), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG5.M), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG6.EN), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG6.ENO), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG6.CLK), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG6.Q), BOOL_ENUM},
+    {&(RES0__INSTANCE0.R_TRIG6.M), BOOL_ENUM},
 };
 
-#define VAR_COUNT               116
+#define VAR_COUNT               162
 
 uint16_t get_var_count(void)
 {
@@ -179,14 +225,16 @@ size_t get_var_size(size_t idx)
     case WORD_ENUM:
     case WORD_O_ENUM:
         return sizeof(WORD);
-    case SINT_ENUM:
-        return sizeof(SINT);
+    case INT_ENUM:
+        return sizeof(INT);
     case BOOL_ENUM:
     case BOOL_O_ENUM:
     case BOOL_P_ENUM:
         return sizeof(BOOL);
     case TIME_ENUM:
         return sizeof(TIME);
+    case SINT_ENUM:
+        return sizeof(SINT);
     default:
         return 0;
     }
@@ -203,8 +251,8 @@ void *get_var_addr(size_t idx)
         return (void *)((((__IEC_WORD_p *) ptr)->flags & __IEC_FORCE_FLAG)
                         ? &(((__IEC_WORD_p *) ptr)->fvalue)
                         : ((__IEC_WORD_p *) ptr)->value);
-    case SINT_ENUM:
-        return (void *)&((__IEC_SINT_t *) ptr)->value;
+    case INT_ENUM:
+        return (void *)&((__IEC_INT_t *) ptr)->value;
     case BOOL_ENUM:
         return (void *)&((__IEC_BOOL_t *) ptr)->value;
     case BOOL_O_ENUM:
@@ -214,6 +262,8 @@ void *get_var_addr(size_t idx)
                         : ((__IEC_BOOL_p *) ptr)->value);
     case TIME_ENUM:
         return (void *)&((__IEC_TIME_t *) ptr)->value;
+    case SINT_ENUM:
+        return (void *)&((__IEC_SINT_t *) ptr)->value;
     default:
         return 0;
     }
@@ -238,9 +288,9 @@ void force_var(size_t idx, bool forced, void *val)
             ((__IEC_WORD_p *) ptr)->flags |= __IEC_FORCE_FLAG;
             break;
         }
-        case SINT_ENUM: {
-            memcpy(&((__IEC_SINT_t *) ptr)->value, val, var_size);
-            ((__IEC_SINT_t *) ptr)->flags |= __IEC_FORCE_FLAG;
+        case INT_ENUM: {
+            memcpy(&((__IEC_INT_t *) ptr)->value, val, var_size);
+            ((__IEC_INT_t *) ptr)->flags |= __IEC_FORCE_FLAG;
             break;
         }
     
@@ -267,6 +317,12 @@ void force_var(size_t idx, bool forced, void *val)
             break;
         }
     
+        case SINT_ENUM: {
+            memcpy(&((__IEC_SINT_t *) ptr)->value, val, var_size);
+            ((__IEC_SINT_t *) ptr)->flags |= __IEC_FORCE_FLAG;
+            break;
+        }
+    
         default:
             break;
         }
@@ -278,8 +334,8 @@ void force_var(size_t idx, bool forced, void *val)
         case WORD_O_ENUM:
             ((__IEC_WORD_p *) ptr)->flags &= ~__IEC_FORCE_FLAG;
             break;
-        case SINT_ENUM:
-            ((__IEC_SINT_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
+        case INT_ENUM:
+            ((__IEC_INT_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
             break;
         case BOOL_ENUM:
             ((__IEC_BOOL_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
@@ -290,6 +346,9 @@ void force_var(size_t idx, bool forced, void *val)
             break;
         case TIME_ENUM:
             ((__IEC_TIME_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
+            break;
+        case SINT_ENUM:
+            ((__IEC_SINT_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
             break;
         default:
             break;

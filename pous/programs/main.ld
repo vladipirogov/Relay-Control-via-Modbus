@@ -1,5 +1,10 @@
 PROGRAM main
 VAR
+	CAN_ERR : bool;
+	K1_CAN_ON : bool;
+	K2_CAN_ON : bool;
+	K1_CAN_OFF : bool;
+	K2_CAN_OFF : bool;
 	BTN_ON_1 : bool AT %IX0.3;
 	BTN_ON_1_TMP : bool;
 	BTN_ON_2 : bool AT %IX0.5;
@@ -12,11 +17,8 @@ VAR
 	BTN_OFF_2_TMP : bool;
 	CMD_WORD : word AT %MW0;
 	CYRCLE_STATE : word AT %MW1 := 0;
-	TON0 : TON;
 	TON0_TMP_ON : bool;
-	TON1 : TON;
 	TON1_TMP_ON : bool;
-	TON2 : TON;
 	TON2_TMP_ON : bool;
 	TON3_TMP_ON : bool;
 	CYCLE_RUN : bool;
@@ -25,8 +27,14 @@ VAR
 	CMD_2 : bool;
 	CMD_3 : bool;
 	CMD_4 : bool;
+	TON0 : TON;
+	TON1 : TON;
+	TON2 : TON;
 	TON3 : TON;
 	TON4 : TON;
+	CAN_INTERFACE0 : CAN_INTERFACE;
+	CAN_STATE : word AT %MW2;
+	BOOL_ON_WORD0 : BOOL_ON_WORD;
 END_VAR
 
 {
@@ -34,14 +42,14 @@ END_VAR
   "rungs": [
     {
       "id": "rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af",
-      "comment": "Modbus register #32 is %MW0. Value 1 switches to ON coil OUT_1. Value 2 switches to ON coil OUT_2. ",
+      "comment": "CAN bus interface",
       "defaultBounds": [
         300,
         100
       ],
       "reactFlowViewport": [
-        826,
-        174
+        622,
+        374
       ],
       "nodes": [
         {
@@ -132,7 +140,4406 @@ END_VAR
           }
         },
         {
-          "id": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+          "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "type": "block",
+          "position": {
+            "x": 143,
+            "y": 14
+          },
+          "height": 340,
+          "width": 216,
+          "measured": {
+            "width": 216,
+            "height": 340
+          },
+          "draggable": true,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 36
+                },
+                "id": "EN",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 36,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 76
+                },
+                "id": "ID_FILTER",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 76,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 130
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 116
+                },
+                "id": "ID_STATE",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 116,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 170
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 156
+                },
+                "id": "STATE_PERIOD",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 156,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 210
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 196
+                },
+                "id": "INPUT_ADDRESS",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 196,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 250
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 236
+                },
+                "id": "NUM_OF_INPUT",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 236,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 290
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 276
+                },
+                "id": "OUTPUT_ADDRESS",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 276,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 330
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 316
+                },
+                "id": "NUM_OF_OUTPUT",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 316,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 359,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 216,
+                  "y": 36
+                },
+                "id": "ENO",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 36,
+                  "right": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 359,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 216,
+                  "y": 76
+                },
+                "id": "ERR",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 76,
+                  "right": 0
+                }
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 36
+                },
+                "id": "EN",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 36,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 76
+                },
+                "id": "ID_FILTER",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 76,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 130
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 116
+                },
+                "id": "ID_STATE",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 116,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 170
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 156
+                },
+                "id": "STATE_PERIOD",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 156,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 210
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 196
+                },
+                "id": "INPUT_ADDRESS",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 196,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 250
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 236
+                },
+                "id": "NUM_OF_INPUT",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 236,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 290
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 276
+                },
+                "id": "OUTPUT_ADDRESS",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 276,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 330
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 316
+                },
+                "id": "NUM_OF_OUTPUT",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 316,
+                  "left": 0
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 359,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 216,
+                  "y": 36
+                },
+                "id": "ENO",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 36,
+                  "right": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 359,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 216,
+                  "y": 76
+                },
+                "id": "ERR",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 76,
+                  "right": 0
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 143,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 36
+              },
+              "id": "EN",
+              "position": "left",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "top": 36,
+                "left": 0
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 359,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 216,
+                "y": 36
+              },
+              "id": "ENO",
+              "position": "right",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "top": 36,
+                "right": 0
+              }
+            },
+            "numericId": "7226811",
+            "variant": {
+              "language": "cpp",
+              "name": "CAN_INTERFACE",
+              "variables": [
+                {
+                  "name": "EN",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "ENO",
+                  "class": "output",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "ID_FILTER",
+                  "class": "input",
+                  "type": {
+                    "value": "INT",
+                    "definition": "base-type"
+                  },
+                  "location": "",
+                  "initialValue": "300",
+                  "documentation": "",
+                  "debug": false
+                },
+                {
+                  "name": "ID_STATE",
+                  "class": "input",
+                  "type": {
+                    "value": "INT",
+                    "definition": "base-type"
+                  },
+                  "location": "",
+                  "initialValue": "310",
+                  "documentation": "",
+                  "debug": false
+                },
+                {
+                  "name": "STATE_PERIOD",
+                  "class": "input",
+                  "type": {
+                    "value": "INT",
+                    "definition": "base-type"
+                  },
+                  "location": "",
+                  "initialValue": "500",
+                  "documentation": "",
+                  "debug": false
+                },
+                {
+                  "name": "INPUT_ADDRESS",
+                  "class": "input",
+                  "type": {
+                    "value": "INT",
+                    "definition": "base-type"
+                  },
+                  "location": "",
+                  "initialValue": "0",
+                  "documentation": "",
+                  "debug": false
+                },
+                {
+                  "name": "NUM_OF_INPUT",
+                  "class": "input",
+                  "type": {
+                    "value": "INT",
+                    "definition": "base-type"
+                  },
+                  "location": "",
+                  "initialValue": "1",
+                  "documentation": "",
+                  "debug": false
+                },
+                {
+                  "name": "OUTPUT_ADDRESS",
+                  "class": "input",
+                  "type": {
+                    "value": "INT",
+                    "definition": "base-type"
+                  },
+                  "location": "",
+                  "initialValue": "2",
+                  "documentation": "",
+                  "debug": false
+                },
+                {
+                  "name": "NUM_OF_OUTPUT",
+                  "class": "input",
+                  "type": {
+                    "value": "INT",
+                    "definition": "base-type"
+                  },
+                  "location": "",
+                  "initialValue": "1",
+                  "documentation": "",
+                  "debug": false
+                },
+                {
+                  "name": "ERR",
+                  "class": "output",
+                  "type": {
+                    "value": "BOOL",
+                    "definition": "base-type"
+                  },
+                  "location": "",
+                  "initialValue": null,
+                  "documentation": "",
+                  "debug": false
+                }
+              ],
+              "body": {
+                "language": "cpp",
+                "value": "#include <CAN.h>\n#include <stdint.h>\n\n// Access OpenPLC %MW memory word array declared in glueVars.c\n// int_memory[n] == &%MW{n}  (IEC_UINT = uint16_t)\nextern IEC_UINT *int_memory[];\nstatic const int MAX_MEMORY_WORDS = 20;\nstatic const int MAX_CAN_WORDS    = 4;  // CAN frame = 8 bytes = 4 x uint16_t\n\nconst int CAN_CS_PIN  = 17;\nconst int CAN_INT_PIN = 20;\n\n// RX staging buffer filled by callback, consumed in loop()\nstatic volatile bool    _rx_ready = false;\nstatic volatile uint8_t _rx_buf[8];\nstatic volatile int     _rx_len   = 0;\nstatic long _id_filter_cached     = 300;\n\nvoid onReceive(int packetSize) {\n    if (packetSize < 1 || CAN.packetRtr() || CAN.packetId() != _id_filter_cached) {\n        while (CAN.available()) CAN.read();\n        return;\n    }\n    int n = 0;\n    while (CAN.available() && n < 8) {\n        _rx_buf[n++] = CAN.read();\n    }\n    _rx_len   = n;\n    _rx_ready = true;\n}\n\nvoid setup() {\n    _id_filter_cached = ID_FILTER;\n\n    CAN.setPins(CAN_CS_PIN, CAN_INT_PIN);\n    CAN.setClockFrequency(8E6);\n\n    if (!CAN.begin(500E3)) {\n        ERR = true;\n        return;\n    }\n\n    CAN.onReceive(onReceive);\n}\n\nvoid loop() {\n\n    // --- RX: decode received bytes as little-endian words → %MW{OUTPUT_ADDRESS+i} ---\n    if (_rx_ready) {\n        noInterrupts();\n        uint8_t buf[8];\n        int len = _rx_len;\n        for (int i = 0; i < len; i++) buf[i] = _rx_buf[i];\n        _rx_ready = false;\n        interrupts();\n\n        int words = len / 2;\n        if (words > NUM_OF_OUTPUT)   words = NUM_OF_OUTPUT;\n        if (words > MAX_CAN_WORDS)   words = MAX_CAN_WORDS;\n\n        for (int i = 0; i < words; i++) {\n            int idx = OUTPUT_ADDRESS + i;\n            if (idx >= 0 && idx < MAX_MEMORY_WORDS && int_memory[idx]) {\n                *int_memory[idx] = (uint16_t)buf[i * 2] |\n                                   ((uint16_t)buf[i * 2 + 1] << 8);\n            }\n        }\n    }\n\n    // --- TX: read %MW{INPUT_ADDRESS+i} words → pack → send on ID_STATE ---\n    static unsigned long last_tx = 0;\n    if (millis() - last_tx > (unsigned long)STATE_PERIOD) {\n        last_tx = millis();\n\n        int words = NUM_OF_INPUT;\n        if (words > MAX_CAN_WORDS) words = MAX_CAN_WORDS;\n\n        CAN.beginPacket(ID_STATE);\n        for (int i = 0; i < words; i++) {\n            int idx = INPUT_ADDRESS + i;\n            uint16_t val = (idx >= 0 && idx < MAX_MEMORY_WORDS && int_memory[idx])\n                           ? *int_memory[idx] : 0;\n            CAN.write((uint8_t)(val & 0xFF));\n            CAN.write((uint8_t)(val >> 8));\n        }\n        CAN.endPacket();\n    }\n}"
+              },
+              "documentation": "",
+              "type": "function-block"
+            },
+            "variable": {
+              "name": "CAN_INTERFACE0",
+              "class": "local",
+              "type": {
+                "definition": "derived",
+                "value": "CAN_INTERFACE"
+              },
+              "location": "",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
+            },
+            "executionOrder": 0,
+            "executionControl": true,
+            "lockExecutionControl": true,
+            "connectedVariables": [
+              {
+                "handleId": "ID_FILTER",
+                "type": "input",
+                "variable": {
+                  "name": "300"
+                }
+              },
+              {
+                "handleId": "ERR",
+                "type": "output",
+                "variable": {
+                  "name": "CAN_ERR"
+                }
+              },
+              {
+                "handleId": "STATE_PERIOD",
+                "type": "input",
+                "variable": {
+                  "name": "500"
+                }
+              },
+              {
+                "handleId": "ID_STATE",
+                "type": "input",
+                "variable": {
+                  "name": "310"
+                }
+              },
+              {
+                "handleId": "NUM_OF_INPUT",
+                "type": "input",
+                "variable": {
+                  "name": "1"
+                }
+              },
+              {
+                "handleId": "NUM_OF_OUTPUT",
+                "type": "input",
+                "variable": {
+                  "name": "1"
+                }
+              },
+              {
+                "handleId": "OUTPUT_ADDRESS",
+                "type": "input",
+                "variable": {
+                  "name": "0"
+                }
+              },
+              {
+                "handleId": "INPUT_ADDRESS",
+                "type": "input",
+                "variable": {
+                  "name": "2"
+                }
+              }
+            ],
+            "draggable": true,
+            "selectable": true,
+            "deletable": true
+          }
+        },
+        {
+          "id": "right-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af",
+          "type": "powerRail",
+          "position": {
+            "x": 619,
+            "y": 30
+          },
+          "height": 40,
+          "width": 3,
+          "measured": {
+            "width": 3,
+            "height": 40
+          },
+          "draggable": false,
+          "selectable": false,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 297,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 3,
+                  "y": 20
+                },
+                "id": "right-rail",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 20,
+                  "left": -3
+                },
+                "x": 619
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 297,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 3,
+                  "y": 20
+                },
+                "id": "right-rail",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 20,
+                  "left": -3
+                }
+              }
+            ],
+            "outputHandles": [],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 297,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 3,
+                "y": 20
+              },
+              "id": "right-rail",
+              "position": "left",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "top": 20,
+                "left": -3
+              }
+            },
+            "numericId": "10519762",
+            "variant": "right",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "draggable": false,
+            "selectable": false,
+            "deletable": false,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "VARIABLE_824fe9a8-c1c8-47b0-bbbb-1edcc1482d0c",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 74
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 90
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "4186477",
+            "variable": {
+              "name": "300"
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+              "handleId": "ID_FILTER",
+              "variableType": {
+                "name": "ID_FILTER",
+                "class": "input",
+                "type": {
+                  "value": "INT",
+                  "definition": "base-type"
+                },
+                "location": "",
+                "initialValue": "300",
+                "documentation": "",
+                "debug": false
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_a6bc6130-e9ef-491f-8e16-499875e1669f",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 114
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 130
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 130
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 130
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "6881710",
+            "variable": {
+              "name": "310"
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+              "handleId": "ID_STATE",
+              "variableType": {
+                "name": "ID_STATE",
+                "class": "input",
+                "type": {
+                  "value": "INT",
+                  "definition": "base-type"
+                },
+                "location": "",
+                "initialValue": "310",
+                "documentation": "",
+                "debug": false
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_4cfdf790-0a3a-4c25-b0b4-be88f61ce517",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 154
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 170
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 170
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 170
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "2681175",
+            "variable": {
+              "name": "500"
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+              "handleId": "STATE_PERIOD",
+              "variableType": {
+                "name": "STATE_PERIOD",
+                "class": "input",
+                "type": {
+                  "value": "INT",
+                  "definition": "base-type"
+                },
+                "location": "",
+                "initialValue": "500",
+                "documentation": "",
+                "debug": false
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_5521ab48-37f4-4cd5-b615-6386f6557869",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 194
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 210
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 210
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 210
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "4400284",
+            "variable": {
+              "name": "2"
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+              "handleId": "INPUT_ADDRESS",
+              "variableType": {
+                "name": "INPUT_ADDRESS",
+                "class": "input",
+                "type": {
+                  "value": "INT",
+                  "definition": "base-type"
+                },
+                "location": "",
+                "initialValue": "0",
+                "documentation": "",
+                "debug": false
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_8b026eb4-8bd7-4f33-818d-f457af5a2aad",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 234
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 250
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 250
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 250
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "4261158",
+            "variable": {
+              "name": "1"
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+              "handleId": "NUM_OF_INPUT",
+              "variableType": {
+                "name": "NUM_OF_INPUT",
+                "class": "input",
+                "type": {
+                  "value": "INT",
+                  "definition": "base-type"
+                },
+                "location": "",
+                "initialValue": "1",
+                "documentation": "",
+                "debug": false
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_05fafaed-bb21-4580-ab31-58a5a575842c",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 274
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 290
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 290
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 290
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "1902632",
+            "variable": {
+              "name": "0"
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+              "handleId": "OUTPUT_ADDRESS",
+              "variableType": {
+                "name": "OUTPUT_ADDRESS",
+                "class": "input",
+                "type": {
+                  "value": "INT",
+                  "definition": "base-type"
+                },
+                "location": "",
+                "initialValue": "2",
+                "documentation": "",
+                "debug": false
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_96f43450-baf0-4336-93a6-04d75e64a69d",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 314
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 330
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 330
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 330
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "1415759",
+            "variable": {
+              "name": "1"
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+              "handleId": "NUM_OF_OUTPUT",
+              "variableType": {
+                "name": "NUM_OF_OUTPUT",
+                "class": "input",
+                "type": {
+                  "value": "INT",
+                  "definition": "base-type"
+                },
+                "location": "",
+                "initialValue": "1",
+                "documentation": "",
+                "debug": false
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_e4d634d4-7cd2-4b97-904e-e8a2224aa960",
+          "type": "variable",
+          "position": {
+            "x": 389,
+            "y": 74
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 389,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 16
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target"
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 389,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 16
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target"
+              }
+            ],
+            "outputHandles": [],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 389,
+                "y": 90
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 16
+              },
+              "id": "input",
+              "position": "left",
+              "isConnectable": false,
+              "type": "target"
+            },
+            "numericId": "9610543",
+            "variable": {
+              "name": "CAN_ERR",
+              "class": "external",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false,
+              "id": "broken-VARIABLE_e4d634d4-7cd2-4b97-904e-e8a2224aa960"
+            },
+            "executionOrder": 0,
+            "variant": "output",
+            "block": {
+              "id": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+              "handleId": "ERR",
+              "variableType": {
+                "name": "ERR",
+                "class": "output",
+                "type": {
+                  "value": "BOOL",
+                  "definition": "base-type"
+                },
+                "location": "",
+                "initialValue": null,
+                "documentation": "",
+                "debug": false
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false,
+            "wrongVariable": true
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e_left-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1__left-rail_EN",
+          "source": "left-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af",
+          "sourceHandle": "left-rail",
+          "target": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "targetHandle": "EN"
+        },
+        {
+          "id": "e_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1_right-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af__ENO_right-rail",
+          "source": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "sourceHandle": "ENO",
+          "target": "right-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af",
+          "targetHandle": "right-rail"
+        },
+        {
+          "id": "e_VARIABLE_824fe9a8-c1c8-47b0-bbbb-1edcc1482d0c_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1__output_ID_FILTER",
+          "source": "VARIABLE_824fe9a8-c1c8-47b0-bbbb-1edcc1482d0c",
+          "sourceHandle": "output",
+          "target": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "targetHandle": "ID_FILTER"
+        },
+        {
+          "id": "e_VARIABLE_a6bc6130-e9ef-491f-8e16-499875e1669f_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1__output_ID_STATE",
+          "source": "VARIABLE_a6bc6130-e9ef-491f-8e16-499875e1669f",
+          "sourceHandle": "output",
+          "target": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "targetHandle": "ID_STATE"
+        },
+        {
+          "id": "e_VARIABLE_4cfdf790-0a3a-4c25-b0b4-be88f61ce517_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1__output_STATE_PERIOD",
+          "source": "VARIABLE_4cfdf790-0a3a-4c25-b0b4-be88f61ce517",
+          "sourceHandle": "output",
+          "target": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "targetHandle": "STATE_PERIOD"
+        },
+        {
+          "id": "e_VARIABLE_5521ab48-37f4-4cd5-b615-6386f6557869_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1__output_INPUT_ADDRESS",
+          "source": "VARIABLE_5521ab48-37f4-4cd5-b615-6386f6557869",
+          "sourceHandle": "output",
+          "target": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "targetHandle": "INPUT_ADDRESS"
+        },
+        {
+          "id": "e_VARIABLE_8b026eb4-8bd7-4f33-818d-f457af5a2aad_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1__output_NUM_OF_INPUT",
+          "source": "VARIABLE_8b026eb4-8bd7-4f33-818d-f457af5a2aad",
+          "sourceHandle": "output",
+          "target": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "targetHandle": "NUM_OF_INPUT"
+        },
+        {
+          "id": "e_VARIABLE_05fafaed-bb21-4580-ab31-58a5a575842c_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1__output_OUTPUT_ADDRESS",
+          "source": "VARIABLE_05fafaed-bb21-4580-ab31-58a5a575842c",
+          "sourceHandle": "output",
+          "target": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "targetHandle": "OUTPUT_ADDRESS"
+        },
+        {
+          "id": "e_VARIABLE_96f43450-baf0-4336-93a6-04d75e64a69d_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1__output_NUM_OF_OUTPUT",
+          "source": "VARIABLE_96f43450-baf0-4336-93a6-04d75e64a69d",
+          "sourceHandle": "output",
+          "target": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "targetHandle": "NUM_OF_OUTPUT"
+        },
+        {
+          "id": "e_BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1_VARIABLE_e4d634d4-7cd2-4b97-904e-e8a2224aa960__ERR_input",
+          "source": "BLOCK_2fdd09a4-feee-4086-bf66-3422e69334f1",
+          "sourceHandle": "ERR",
+          "target": "VARIABLE_e4d634d4-7cd2-4b97-904e-e8a2224aa960",
+          "targetHandle": "input"
+        }
+      ]
+    },
+    {
+      "id": "rung_main_a2c2327c-250f-4ff3-bc79-12eaa84af233",
+      "comment": "SET K1, K2 relays states to CAN bus state variable CAN_STATE %MW2",
+      "defaultBounds": [
+        300,
+        100
+      ],
+      "reactFlowViewport": [
+        592,
+        734
+      ],
+      "nodes": [
+        {
+          "id": "left-rail-rung_main_a2c2327c-250f-4ff3-bc79-12eaa84af233",
+          "type": "powerRail",
+          "position": {
+            "x": 0,
+            "y": 30
+          },
+          "height": 40,
+          "width": 3,
+          "measured": {
+            "width": 3,
+            "height": 40
+          },
+          "draggable": false,
+          "selectable": false,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 3,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 3,
+                  "y": 20
+                },
+                "id": "left-rail",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 20,
+                  "right": -3
+                }
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 3,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 3,
+                  "y": 20
+                },
+                "id": "left-rail",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 20,
+                  "right": -3
+                }
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 3,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 3,
+                "y": 20
+              },
+              "id": "left-rail",
+              "position": "right",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "top": 20,
+                "right": -3
+              }
+            },
+            "numericId": "6669805",
+            "variant": "left",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "draggable": false,
+            "selectable": false,
+            "deletable": false,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "type": "block",
+          "position": {
+            "x": 143,
+            "y": 14
+          },
+          "height": 700,
+          "width": 186,
+          "measured": {
+            "width": 186,
+            "height": 700
+          },
+          "draggable": true,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 36
+                },
+                "id": "EN",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 36,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 76
+                },
+                "id": "B_IN0",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 76,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 130
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 116
+                },
+                "id": "B_IN1",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 116,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 170
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 156
+                },
+                "id": "B_IN2",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 156,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 210
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 196
+                },
+                "id": "B_IN3",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 196,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 250
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 236
+                },
+                "id": "B_IN4",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 236,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 290
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 276
+                },
+                "id": "B_IN5",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 276,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 330
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 316
+                },
+                "id": "B_IN6",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 316,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 370
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 356
+                },
+                "id": "B_IN7",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 356,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 410
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 396
+                },
+                "id": "B_IN8",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 396,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 450
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 436
+                },
+                "id": "B_IN9",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 436,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 490
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 476
+                },
+                "id": "B_IN10",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 476,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 530
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 516
+                },
+                "id": "B_IN11",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 516,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 570
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 556
+                },
+                "id": "B_IN12",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 556,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 610
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 596
+                },
+                "id": "B_IN13",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 596,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 650
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 636
+                },
+                "id": "B_IN14",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 636,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 690
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 676
+                },
+                "id": "B_IN15",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 676,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 329,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 186,
+                  "y": 36
+                },
+                "id": "ENO",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 36,
+                  "right": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 329,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 186,
+                  "y": 76
+                },
+                "id": "WORD_OUT",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 76,
+                  "right": 0
+                }
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 36
+                },
+                "id": "EN",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 36,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 76
+                },
+                "id": "B_IN0",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 76,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 130
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 116
+                },
+                "id": "B_IN1",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 116,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 170
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 156
+                },
+                "id": "B_IN2",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 156,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 210
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 196
+                },
+                "id": "B_IN3",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 196,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 250
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 236
+                },
+                "id": "B_IN4",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 236,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 290
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 276
+                },
+                "id": "B_IN5",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 276,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 330
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 316
+                },
+                "id": "B_IN6",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 316,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 370
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 356
+                },
+                "id": "B_IN7",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 356,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 410
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 396
+                },
+                "id": "B_IN8",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 396,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 450
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 436
+                },
+                "id": "B_IN9",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 436,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 490
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 476
+                },
+                "id": "B_IN10",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 476,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 530
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 516
+                },
+                "id": "B_IN11",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 516,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 570
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 556
+                },
+                "id": "B_IN12",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 556,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 610
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 596
+                },
+                "id": "B_IN13",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 596,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 650
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 636
+                },
+                "id": "B_IN14",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 636,
+                  "left": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 143,
+                  "y": 690
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 676
+                },
+                "id": "B_IN15",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 676,
+                  "left": 0
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 329,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 186,
+                  "y": 36
+                },
+                "id": "ENO",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 36,
+                  "right": 0
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 329,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 186,
+                  "y": 76
+                },
+                "id": "WORD_OUT",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 76,
+                  "right": 0
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 143,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 36
+              },
+              "id": "EN",
+              "position": "left",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "top": 36,
+                "left": 0
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 329,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 186,
+                "y": 36
+              },
+              "id": "ENO",
+              "position": "right",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "top": 36,
+                "right": 0
+              }
+            },
+            "numericId": "2635089",
+            "variant": {
+              "name": "BOOL_ON_WORD",
+              "type": "function-block",
+              "variables": [
+                {
+                  "name": "EN",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "ENO",
+                  "class": "output",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN0",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN1",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN2",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN3",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN4",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN5",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN6",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN7",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN8",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN9",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN10",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN11",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN12",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN13",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN14",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "B_IN15",
+                  "class": "input",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "BOOL"
+                  }
+                },
+                {
+                  "name": "WORD_OUT",
+                  "class": "output",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "WORD"
+                  }
+                }
+              ],
+              "documentation": "",
+              "extensible": false
+            },
+            "variable": {
+              "name": "BOOL_ON_WORD0",
+              "type": {
+                "definition": "derived",
+                "value": "BOOL_ON_WORD"
+              },
+              "class": "local",
+              "location": "",
+              "documentation": "",
+              "debug": false
+            },
+            "executionOrder": 0,
+            "executionControl": true,
+            "lockExecutionControl": true,
+            "connectedVariables": [
+              {
+                "handleId": "B_IN0",
+                "type": "input",
+                "variable": {
+                  "name": "K1",
+                  "class": "local",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "bool"
+                  },
+                  "location": "%QX0.0",
+                  "initialValue": null,
+                  "documentation": "",
+                  "debug": false
+                }
+              },
+              {
+                "handleId": "B_IN1",
+                "type": "input",
+                "variable": {
+                  "name": "K2",
+                  "class": "local",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "bool"
+                  },
+                  "location": "%QX0.1",
+                  "initialValue": null,
+                  "documentation": "",
+                  "debug": false
+                }
+              },
+              {
+                "handleId": "WORD_OUT",
+                "type": "output",
+                "variable": {
+                  "name": "CAN_STATE",
+                  "class": "local",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "word"
+                  },
+                  "location": "%MW2",
+                  "initialValue": null,
+                  "documentation": "",
+                  "debug": false
+                }
+              }
+            ],
+            "draggable": true,
+            "selectable": true,
+            "deletable": true,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "right-rail-rung_main_a2c2327c-250f-4ff3-bc79-12eaa84af233",
+          "type": "powerRail",
+          "position": {
+            "x": 589,
+            "y": 30
+          },
+          "height": 40,
+          "width": 3,
+          "measured": {
+            "width": 3,
+            "height": 40
+          },
+          "draggable": false,
+          "selectable": false,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 297,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 3,
+                  "y": 20
+                },
+                "id": "right-rail",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 20,
+                  "left": -3
+                },
+                "x": 589
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 297,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 3,
+                  "y": 20
+                },
+                "id": "right-rail",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 20,
+                  "left": -3
+                }
+              }
+            ],
+            "outputHandles": [],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 297,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 3,
+                "y": 20
+              },
+              "id": "right-rail",
+              "position": "left",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "top": 20,
+                "left": -3
+              }
+            },
+            "numericId": "9764107",
+            "variant": "right",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "draggable": false,
+            "selectable": false,
+            "deletable": false,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "VARIABLE_470ab093-cf02-4ab2-96bd-7dd88cb8332f",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 74
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 90
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "5346297",
+            "variable": {
+              "name": "K1",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "%QX0.0",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN0",
+              "variableType": {
+                "name": "B_IN0",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_cd29c253-ec4d-4ad8-bd4f-672190bf97a5",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 114
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 130
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 130
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 130
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "9194140",
+            "variable": {
+              "name": "K2",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "%QX0.1",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN1",
+              "variableType": {
+                "name": "B_IN1",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_00db0815-0976-4758-a7f9-7cb87c9412b8",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 154
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 170
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 170
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 170
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "6538114",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN2",
+              "variableType": {
+                "name": "B_IN2",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_77376d21-71db-4c20-adfe-d58afbfd16d5",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 194
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 210
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 210
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 210
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "1932940",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN3",
+              "variableType": {
+                "name": "B_IN3",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_f412b8aa-407a-4f68-b3e2-1d339f322c0b",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 234
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 250
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 250
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 250
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "6271785",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN4",
+              "variableType": {
+                "name": "B_IN4",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_7f057f25-9f2b-4c82-821d-d49b5301badc",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 274
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 290
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 290
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 290
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "3114233",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN5",
+              "variableType": {
+                "name": "B_IN5",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_49d078db-f4b3-40fe-97a1-e8910f7c086f",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 314
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 330
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 330
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 330
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "8482384",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN6",
+              "variableType": {
+                "name": "B_IN6",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_56c151c6-14dd-485e-a869-62ef6d2773ea",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 354
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 370
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 370
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 370
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "2443125",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN7",
+              "variableType": {
+                "name": "B_IN7",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_6d3e45fc-f2f1-443e-a9eb-516e56995f55",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 394
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 410
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 410
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 410
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "9270185",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN8",
+              "variableType": {
+                "name": "B_IN8",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_127cd0f1-1cc9-4246-a0de-a922c64c63ff",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 434
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 450
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 450
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 450
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "3698961",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN9",
+              "variableType": {
+                "name": "B_IN9",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_2ed255e6-1486-4cd4-aed4-c2018cb1b03f",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 474
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 490
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 490
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 490
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "1968401",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN10",
+              "variableType": {
+                "name": "B_IN10",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_d7b9b2fa-1ba7-4288-b16f-c2f3df84725f",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 514
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 530
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 530
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 530
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "8457346",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN11",
+              "variableType": {
+                "name": "B_IN11",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_a5aa2f03-6825-4599-9da8-d840f58a9872",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 554
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 570
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 570
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 570
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "492611",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN12",
+              "variableType": {
+                "name": "B_IN12",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_a3ee5921-e48b-422b-ac82-468a0d12fe9a",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 594
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 610
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 610
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 610
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "8625175",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN13",
+              "variableType": {
+                "name": "B_IN13",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_4de30068-3c4c-4f14-b991-1011a67e04d3",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 634
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 650
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 650
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 650
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "3411132",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN14",
+              "variableType": {
+                "name": "B_IN14",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_93afcf88-0967-4fd5-9c70-e9201f077c38",
+          "type": "variable",
+          "position": {
+            "x": 33,
+            "y": 674
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 690
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 193,
+                  "y": 690
+                },
+                "relPosition": {
+                  "x": 80,
+                  "y": 16
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source"
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 193,
+                "y": 690
+              },
+              "relPosition": {
+                "x": 80,
+                "y": 16
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source"
+            },
+            "numericId": "6020531",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "variant": "input",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "B_IN15",
+              "variableType": {
+                "name": "B_IN15",
+                "class": "input",
+                "type": {
+                  "definition": "base-type",
+                  "value": "BOOL"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        },
+        {
+          "id": "VARIABLE_761a5df9-edea-4986-88c5-d47a46267bc8",
+          "type": "variable",
+          "position": {
+            "x": 359,
+            "y": 74
+          },
+          "height": 32,
+          "width": 80,
+          "measured": {
+            "width": 80,
+            "height": 32
+          },
+          "draggable": false,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 359,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 16
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target"
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 359,
+                  "y": 90
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 16
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target"
+              }
+            ],
+            "outputHandles": [],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 359,
+                "y": 90
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 16
+              },
+              "id": "input",
+              "position": "left",
+              "isConnectable": false,
+              "type": "target"
+            },
+            "numericId": "2915066",
+            "variable": {
+              "name": "CAN_STATE",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "word"
+              },
+              "location": "%MW2",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
+            },
+            "executionOrder": 0,
+            "variant": "output",
+            "block": {
+              "id": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+              "handleId": "WORD_OUT",
+              "variableType": {
+                "name": "WORD_OUT",
+                "class": "output",
+                "type": {
+                  "definition": "base-type",
+                  "value": "WORD"
+                }
+              }
+            },
+            "draggable": false,
+            "selectable": true,
+            "deletable": false
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e_left-rail-rung_main_a2c2327c-250f-4ff3-bc79-12eaa84af233_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__left-rail_EN",
+          "source": "left-rail-rung_main_a2c2327c-250f-4ff3-bc79-12eaa84af233",
+          "sourceHandle": "left-rail",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "EN"
+        },
+        {
+          "id": "e_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d_right-rail-rung_main_a2c2327c-250f-4ff3-bc79-12eaa84af233__ENO_right-rail",
+          "source": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "sourceHandle": "ENO",
+          "target": "right-rail-rung_main_a2c2327c-250f-4ff3-bc79-12eaa84af233",
+          "targetHandle": "right-rail"
+        },
+        {
+          "id": "e_VARIABLE_470ab093-cf02-4ab2-96bd-7dd88cb8332f_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN0",
+          "source": "VARIABLE_470ab093-cf02-4ab2-96bd-7dd88cb8332f",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN0"
+        },
+        {
+          "id": "e_VARIABLE_cd29c253-ec4d-4ad8-bd4f-672190bf97a5_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN1",
+          "source": "VARIABLE_cd29c253-ec4d-4ad8-bd4f-672190bf97a5",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN1"
+        },
+        {
+          "id": "e_VARIABLE_00db0815-0976-4758-a7f9-7cb87c9412b8_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN2",
+          "source": "VARIABLE_00db0815-0976-4758-a7f9-7cb87c9412b8",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN2"
+        },
+        {
+          "id": "e_VARIABLE_77376d21-71db-4c20-adfe-d58afbfd16d5_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN3",
+          "source": "VARIABLE_77376d21-71db-4c20-adfe-d58afbfd16d5",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN3"
+        },
+        {
+          "id": "e_VARIABLE_f412b8aa-407a-4f68-b3e2-1d339f322c0b_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN4",
+          "source": "VARIABLE_f412b8aa-407a-4f68-b3e2-1d339f322c0b",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN4"
+        },
+        {
+          "id": "e_VARIABLE_7f057f25-9f2b-4c82-821d-d49b5301badc_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN5",
+          "source": "VARIABLE_7f057f25-9f2b-4c82-821d-d49b5301badc",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN5"
+        },
+        {
+          "id": "e_VARIABLE_49d078db-f4b3-40fe-97a1-e8910f7c086f_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN6",
+          "source": "VARIABLE_49d078db-f4b3-40fe-97a1-e8910f7c086f",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN6"
+        },
+        {
+          "id": "e_VARIABLE_56c151c6-14dd-485e-a869-62ef6d2773ea_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN7",
+          "source": "VARIABLE_56c151c6-14dd-485e-a869-62ef6d2773ea",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN7"
+        },
+        {
+          "id": "e_VARIABLE_6d3e45fc-f2f1-443e-a9eb-516e56995f55_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN8",
+          "source": "VARIABLE_6d3e45fc-f2f1-443e-a9eb-516e56995f55",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN8"
+        },
+        {
+          "id": "e_VARIABLE_127cd0f1-1cc9-4246-a0de-a922c64c63ff_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN9",
+          "source": "VARIABLE_127cd0f1-1cc9-4246-a0de-a922c64c63ff",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN9"
+        },
+        {
+          "id": "e_VARIABLE_2ed255e6-1486-4cd4-aed4-c2018cb1b03f_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN10",
+          "source": "VARIABLE_2ed255e6-1486-4cd4-aed4-c2018cb1b03f",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN10"
+        },
+        {
+          "id": "e_VARIABLE_d7b9b2fa-1ba7-4288-b16f-c2f3df84725f_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN11",
+          "source": "VARIABLE_d7b9b2fa-1ba7-4288-b16f-c2f3df84725f",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN11"
+        },
+        {
+          "id": "e_VARIABLE_a5aa2f03-6825-4599-9da8-d840f58a9872_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN12",
+          "source": "VARIABLE_a5aa2f03-6825-4599-9da8-d840f58a9872",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN12"
+        },
+        {
+          "id": "e_VARIABLE_a3ee5921-e48b-422b-ac82-468a0d12fe9a_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN13",
+          "source": "VARIABLE_a3ee5921-e48b-422b-ac82-468a0d12fe9a",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN13"
+        },
+        {
+          "id": "e_VARIABLE_4de30068-3c4c-4f14-b991-1011a67e04d3_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN14",
+          "source": "VARIABLE_4de30068-3c4c-4f14-b991-1011a67e04d3",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN14"
+        },
+        {
+          "id": "e_VARIABLE_93afcf88-0967-4fd5-9c70-e9201f077c38_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d__output_B_IN15",
+          "source": "VARIABLE_93afcf88-0967-4fd5-9c70-e9201f077c38",
+          "sourceHandle": "output",
+          "target": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "targetHandle": "B_IN15"
+        },
+        {
+          "id": "e_BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d_VARIABLE_761a5df9-edea-4986-88c5-d47a46267bc8__WORD_OUT_input",
+          "source": "BLOCK_01d697b7-ba01-42b0-8d3c-491888335a1d",
+          "sourceHandle": "WORD_OUT",
+          "target": "VARIABLE_761a5df9-edea-4986-88c5-d47a46267bc8",
+          "targetHandle": "input"
+        }
+      ]
+    },
+    {
+      "id": "rung_main_4e4b250c-0ca2-4e44-8f26-7492e4dd9dd2",
+      "comment": "Modbus register #32 is %MW0. Value 1 switches to ON coil OUT_1. Value 2 switches to ON coil OUT_2. ",
+      "defaultBounds": [
+        300,
+        100
+      ],
+      "reactFlowViewport": [
+        826,
+        174
+      ],
+      "nodes": [
+        {
+          "id": "left-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af",
+          "type": "powerRail",
+          "position": {
+            "x": 0,
+            "y": 30
+          },
+          "height": 40,
+          "width": 3,
+          "measured": {
+            "width": 3,
+            "height": 40
+          },
+          "draggable": false,
+          "selectable": false,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 3,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 3,
+                  "y": 20
+                },
+                "id": "left-rail",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 20,
+                  "right": -3
+                }
+              }
+            ],
+            "inputHandles": [],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 3,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 3,
+                  "y": 20
+                },
+                "id": "left-rail",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 20,
+                  "right": -3
+                }
+              }
+            ],
+            "outputConnector": {
+              "glbPosition": {
+                "x": 3,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 3,
+                "y": 20
+              },
+              "id": "left-rail",
+              "position": "right",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "top": 20,
+                "right": -3
+              }
+            },
+            "numericId": "2782838",
+            "variant": "left",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "draggable": false,
+            "selectable": false,
+            "deletable": false,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
           "type": "block",
           "position": {
             "x": 143,
@@ -369,7 +4776,7 @@ END_VAR
                 "right": 0
               }
             },
-            "numericId": "3776762",
+            "numericId": "5689106",
             "variant": {
               "name": "EQ",
               "type": "function",
@@ -469,12 +4876,11 @@ END_VAR
             ],
             "draggable": true,
             "selectable": true,
-            "deletable": true,
-            "hasDivergence": false
+            "deletable": true
           }
         },
         {
-          "id": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+          "id": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
           "type": "block",
           "position": {
             "x": 473,
@@ -711,7 +5117,7 @@ END_VAR
                 "right": 0
               }
             },
-            "numericId": "3354236",
+            "numericId": "5766092",
             "variant": {
               "name": "EQ",
               "type": "function",
@@ -797,12 +5203,13 @@ END_VAR
                 "type": "output",
                 "variable": {
                   "name": "CMD_2",
+                  "class": "local",
                   "type": {
                     "definition": "base-type",
                     "value": "bool"
                   },
-                  "class": "local",
                   "location": "",
+                  "initialValue": null,
                   "documentation": "",
                   "debug": false
                 }
@@ -810,8 +5217,7 @@ END_VAR
             ],
             "draggable": true,
             "selectable": true,
-            "deletable": true,
-            "hasDivergence": false
+            "deletable": true
           }
         },
         {
@@ -890,7 +5296,7 @@ END_VAR
                 "left": -3
               }
             },
-            "numericId": "10519762",
+            "numericId": "5315004",
             "variant": "right",
             "variable": {
               "name": ""
@@ -903,7 +5309,7 @@ END_VAR
           }
         },
         {
-          "id": "VARIABLE_5f544bf2-da1e-4916-9d0c-60f8c60ade02",
+          "id": "VARIABLE_9af352c1-ee3a-459d-8d3e-22dcf905fc63",
           "type": "variable",
           "position": {
             "x": 33,
@@ -965,7 +5371,7 @@ END_VAR
               "isConnectable": false,
               "type": "source"
             },
-            "numericId": "2397427",
+            "numericId": "4260701",
             "variable": {
               "name": "CMD_WORD",
               "class": "local",
@@ -976,12 +5382,13 @@ END_VAR
               "location": "%MW0",
               "initialValue": null,
               "documentation": "",
-              "debug": true
+              "debug": false,
+              "id": "broken-VARIABLE_9af352c1-ee3a-459d-8d3e-22dcf905fc63"
             },
             "executionOrder": 0,
             "variant": "input",
             "block": {
-              "id": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+              "id": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
               "handleId": "IN1",
               "variableType": {
                 "name": "IN1",
@@ -999,7 +5406,7 @@ END_VAR
           }
         },
         {
-          "id": "VARIABLE_d0ae44c0-1053-4176-8d60-22d5f65b007c",
+          "id": "VARIABLE_6b4a335d-46cc-4b11-83d1-38e21bd90491",
           "type": "variable",
           "position": {
             "x": 33,
@@ -1061,14 +5468,14 @@ END_VAR
               "isConnectable": false,
               "type": "source"
             },
-            "numericId": "1251335",
+            "numericId": "2833564",
             "variable": {
               "name": "1"
             },
             "executionOrder": 0,
             "variant": "input",
             "block": {
-              "id": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+              "id": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
               "handleId": "IN2",
               "variableType": {
                 "name": "IN2",
@@ -1085,7 +5492,7 @@ END_VAR
           }
         },
         {
-          "id": "VARIABLE_6288c486-a2f3-43e7-bcc0-d416f39468d5",
+          "id": "VARIABLE_d264f66d-5b40-40ec-9aee-20683ed3bb43",
           "type": "variable",
           "position": {
             "x": 263,
@@ -1147,7 +5554,7 @@ END_VAR
               "isConnectable": false,
               "type": "target"
             },
-            "numericId": "1880914",
+            "numericId": "3116794",
             "variable": {
               "name": "CMD_1",
               "class": "local",
@@ -1158,12 +5565,13 @@ END_VAR
               "location": "",
               "initialValue": null,
               "documentation": "",
-              "debug": false
+              "debug": false,
+              "id": "broken-VARIABLE_d264f66d-5b40-40ec-9aee-20683ed3bb43"
             },
             "executionOrder": 0,
             "variant": "output",
             "block": {
-              "id": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+              "id": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
               "handleId": "OUT",
               "variableType": {
                 "name": "OUT",
@@ -1181,7 +5589,7 @@ END_VAR
           }
         },
         {
-          "id": "VARIABLE_fb4f1516-1a02-46aa-8a4b-82e0294f2433",
+          "id": "VARIABLE_7c530c6a-dc10-4873-a296-e7e4ae7e1554",
           "type": "variable",
           "position": {
             "x": 363,
@@ -1243,7 +5651,7 @@ END_VAR
               "isConnectable": false,
               "type": "source"
             },
-            "numericId": "5655365",
+            "numericId": "5334656",
             "variable": {
               "name": "CMD_WORD",
               "class": "local",
@@ -1254,13 +5662,13 @@ END_VAR
               "location": "%MW0",
               "initialValue": null,
               "documentation": "",
-              "debug": true,
-              "id": "broken-VARIABLE_fb4f1516-1a02-46aa-8a4b-82e0294f2433"
+              "debug": false,
+              "id": "broken-VARIABLE_7c530c6a-dc10-4873-a296-e7e4ae7e1554"
             },
             "executionOrder": 0,
             "variant": "input",
             "block": {
-              "id": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+              "id": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
               "handleId": "IN1",
               "variableType": {
                 "name": "IN1",
@@ -1278,7 +5686,7 @@ END_VAR
           }
         },
         {
-          "id": "VARIABLE_52d455a4-6410-4b71-9746-f1ab1d90f94a",
+          "id": "VARIABLE_3afc1703-939d-4ef3-95cf-d7a727c86e9a",
           "type": "variable",
           "position": {
             "x": 363,
@@ -1340,14 +5748,14 @@ END_VAR
               "isConnectable": false,
               "type": "source"
             },
-            "numericId": "3098394",
+            "numericId": "9644040",
             "variable": {
               "name": "2"
             },
             "executionOrder": 0,
             "variant": "input",
             "block": {
-              "id": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+              "id": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
               "handleId": "IN2",
               "variableType": {
                 "name": "IN2",
@@ -1364,7 +5772,7 @@ END_VAR
           }
         },
         {
-          "id": "VARIABLE_8f99da3a-daec-4af5-ba58-aa3099f98431",
+          "id": "VARIABLE_b6f356d1-cc40-4e8a-8496-fbae6b8b4a9f",
           "type": "variable",
           "position": {
             "x": 593,
@@ -1426,7 +5834,7 @@ END_VAR
               "isConnectable": false,
               "type": "target"
             },
-            "numericId": "6026593",
+            "numericId": "1547764",
             "variable": {
               "name": "CMD_2",
               "class": "local",
@@ -1438,12 +5846,12 @@ END_VAR
               "initialValue": null,
               "documentation": "",
               "debug": false,
-              "id": "broken-VARIABLE_8f99da3a-daec-4af5-ba58-aa3099f98431"
+              "id": "broken-VARIABLE_b6f356d1-cc40-4e8a-8496-fbae6b8b4a9f"
             },
             "executionOrder": 0,
             "variant": "output",
             "block": {
-              "id": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+              "id": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
               "handleId": "OUT",
               "variableType": {
                 "name": "OUT",
@@ -1463,66 +5871,66 @@ END_VAR
       ],
       "edges": [
         {
-          "id": "e_left-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af_BLOCK_c0b94606-e807-4352-bfd6-e11321768261__left-rail_IN1",
+          "id": "e_left-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af_BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc__left-rail_EN",
           "source": "left-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af",
           "sourceHandle": "left-rail",
-          "target": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+          "target": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
           "targetHandle": "EN"
         },
         {
-          "id": "e_BLOCK_c0b94606-e807-4352-bfd6-e11321768261_BLOCK_befc7972-31e2-4f75-9294-d89394d1888a__ENO_IN1",
-          "source": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+          "id": "e_BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc_BLOCK_612d19b8-caee-43ff-b580-94ba1f814463__ENO_EN",
+          "source": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
           "sourceHandle": "ENO",
-          "target": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+          "target": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
           "targetHandle": "EN"
         },
         {
-          "id": "e_BLOCK_befc7972-31e2-4f75-9294-d89394d1888a_right-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af__ENO_right-rail",
-          "source": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+          "id": "e_BLOCK_612d19b8-caee-43ff-b580-94ba1f814463_right-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af__ENO_right-rail",
+          "source": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
           "sourceHandle": "ENO",
           "target": "right-rail-rung_main_d3d67e52-e4ba-483a-8be1-b877236b38af",
           "targetHandle": "right-rail"
         },
         {
-          "id": "e_VARIABLE_5f544bf2-da1e-4916-9d0c-60f8c60ade02_BLOCK_c0b94606-e807-4352-bfd6-e11321768261__output_IN1",
-          "source": "VARIABLE_5f544bf2-da1e-4916-9d0c-60f8c60ade02",
+          "id": "e_VARIABLE_9af352c1-ee3a-459d-8d3e-22dcf905fc63_BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc__output_IN1",
+          "source": "VARIABLE_9af352c1-ee3a-459d-8d3e-22dcf905fc63",
           "sourceHandle": "output",
-          "target": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+          "target": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
           "targetHandle": "IN1"
         },
         {
-          "id": "e_VARIABLE_d0ae44c0-1053-4176-8d60-22d5f65b007c_BLOCK_c0b94606-e807-4352-bfd6-e11321768261__output_IN2",
-          "source": "VARIABLE_d0ae44c0-1053-4176-8d60-22d5f65b007c",
+          "id": "e_VARIABLE_6b4a335d-46cc-4b11-83d1-38e21bd90491_BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc__output_IN2",
+          "source": "VARIABLE_6b4a335d-46cc-4b11-83d1-38e21bd90491",
           "sourceHandle": "output",
-          "target": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+          "target": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
           "targetHandle": "IN2"
         },
         {
-          "id": "e_BLOCK_c0b94606-e807-4352-bfd6-e11321768261_VARIABLE_6288c486-a2f3-43e7-bcc0-d416f39468d5__OUT_input",
-          "source": "BLOCK_c0b94606-e807-4352-bfd6-e11321768261",
+          "id": "e_BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc_VARIABLE_d264f66d-5b40-40ec-9aee-20683ed3bb43__OUT_input",
+          "source": "BLOCK_1c256546-179f-47ed-93c0-56252cd1c1bc",
           "sourceHandle": "OUT",
-          "target": "VARIABLE_6288c486-a2f3-43e7-bcc0-d416f39468d5",
+          "target": "VARIABLE_d264f66d-5b40-40ec-9aee-20683ed3bb43",
           "targetHandle": "input"
         },
         {
-          "id": "e_VARIABLE_fb4f1516-1a02-46aa-8a4b-82e0294f2433_BLOCK_befc7972-31e2-4f75-9294-d89394d1888a__output_IN1",
-          "source": "VARIABLE_fb4f1516-1a02-46aa-8a4b-82e0294f2433",
+          "id": "e_VARIABLE_7c530c6a-dc10-4873-a296-e7e4ae7e1554_BLOCK_612d19b8-caee-43ff-b580-94ba1f814463__output_IN1",
+          "source": "VARIABLE_7c530c6a-dc10-4873-a296-e7e4ae7e1554",
           "sourceHandle": "output",
-          "target": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+          "target": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
           "targetHandle": "IN1"
         },
         {
-          "id": "e_VARIABLE_52d455a4-6410-4b71-9746-f1ab1d90f94a_BLOCK_befc7972-31e2-4f75-9294-d89394d1888a__output_IN2",
-          "source": "VARIABLE_52d455a4-6410-4b71-9746-f1ab1d90f94a",
+          "id": "e_VARIABLE_3afc1703-939d-4ef3-95cf-d7a727c86e9a_BLOCK_612d19b8-caee-43ff-b580-94ba1f814463__output_IN2",
+          "source": "VARIABLE_3afc1703-939d-4ef3-95cf-d7a727c86e9a",
           "sourceHandle": "output",
-          "target": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+          "target": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
           "targetHandle": "IN2"
         },
         {
-          "id": "e_BLOCK_befc7972-31e2-4f75-9294-d89394d1888a_VARIABLE_8f99da3a-daec-4af5-ba58-aa3099f98431__OUT_input",
-          "source": "BLOCK_befc7972-31e2-4f75-9294-d89394d1888a",
+          "id": "e_BLOCK_612d19b8-caee-43ff-b580-94ba1f814463_VARIABLE_b6f356d1-cc40-4e8a-8496-fbae6b8b4a9f__OUT_input",
+          "source": "BLOCK_612d19b8-caee-43ff-b580-94ba1f814463",
           "sourceHandle": "OUT",
-          "target": "VARIABLE_8f99da3a-daec-4af5-ba58-aa3099f98431",
+          "target": "VARIABLE_b6f356d1-cc40-4e8a-8496-fbae6b8b4a9f",
           "targetHandle": "input"
         }
       ]
@@ -1950,12 +6358,13 @@ END_VAR
                 "type": "output",
                 "variable": {
                   "name": "CMD_3",
+                  "class": "local",
                   "type": {
                     "definition": "base-type",
                     "value": "bool"
                   },
-                  "class": "local",
                   "location": "",
+                  "initialValue": null,
                   "documentation": "",
                   "debug": false
                 }
@@ -2290,7 +6699,16 @@ END_VAR
                 "handleId": "OUT",
                 "type": "output",
                 "variable": {
-                  "name": "CMD_4"
+                  "name": "CMD_4",
+                  "class": "local",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "bool"
+                  },
+                  "location": "",
+                  "initialValue": null,
+                  "documentation": "",
+                  "debug": false
                 }
               }
             ],
@@ -2462,7 +6880,7 @@ END_VAR
               "location": "%MW0",
               "initialValue": null,
               "documentation": "",
-              "debug": true,
+              "debug": false,
               "id": "broken-VARIABLE_5c41c543-fd6b-44b7-b38a-69b4aff64d8d"
             },
             "executionOrder": 0,
@@ -2742,7 +7160,7 @@ END_VAR
               "location": "%MW0",
               "initialValue": null,
               "documentation": "",
-              "debug": true,
+              "debug": false,
               "id": "broken-VARIABLE_31db7fb8-e022-4671-a72e-aa8cbc0f8028"
             },
             "executionOrder": 0,
@@ -3618,7 +8036,8 @@ END_VAR
               "location": "%MW0",
               "initialValue": null,
               "documentation": "",
-              "debug": true
+              "debug": false,
+              "id": "broken-VARIABLE_569b0455-e2ce-4c1c-9409-73ee7f2d3540"
             },
             "executionOrder": 0,
             "variant": "input",
@@ -3800,7 +8219,8 @@ END_VAR
               "location": "",
               "initialValue": null,
               "documentation": "",
-              "debug": false
+              "debug": false,
+              "id": "broken-VARIABLE_ffa564e6-01c9-49f0-92cb-a68e6edb625d"
             },
             "executionOrder": 0,
             "variant": "output",
@@ -4490,7 +8910,7 @@ END_VAR
               "location": "%MW0",
               "initialValue": null,
               "documentation": "",
-              "debug": true,
+              "debug": false,
               "id": "broken-VARIABLE_f1ffdf3c-b469-4690-b2ed-6785aed7a9eb"
             },
             "executionOrder": 0,
@@ -4793,7 +9213,7 @@ END_VAR
             "width": 28,
             "height": 24
           },
-          "draggable": false,
+          "draggable": true,
           "selectable": true,
           "data": {
             "handles": [
@@ -5454,7 +9874,8 @@ END_VAR
               "location": "%MW1",
               "initialValue": "0",
               "documentation": "",
-              "debug": true
+              "debug": false,
+              "id": "broken-VARIABLE_2f9a01c1-676c-4353-8b88-3376da041592"
             },
             "executionOrder": 0,
             "variant": "output",
@@ -6946,7 +11367,8 @@ END_VAR
               "location": "%MW1",
               "initialValue": "0",
               "documentation": "",
-              "debug": true
+              "debug": false,
+              "id": "broken-VARIABLE_29152d54-d6eb-4112-9e91-31851917a7d3"
             },
             "executionOrder": 0,
             "variant": "output",
@@ -8443,7 +12865,7 @@ END_VAR
               "location": "%MW1",
               "initialValue": "0",
               "documentation": "",
-              "debug": true,
+              "debug": false,
               "id": "broken-VARIABLE_feb20852-8186-434b-9a74-fd4ee52c1acc"
             },
             "executionOrder": 0,
@@ -9940,7 +14362,7 @@ END_VAR
               "location": "%MW1",
               "initialValue": "0",
               "documentation": "",
-              "debug": true,
+              "debug": false,
               "id": "broken-VARIABLE_60ff750c-6e20-4023-b14a-109466391f72"
             },
             "executionOrder": 0,
@@ -11438,7 +15860,7 @@ END_VAR
               "location": "%MW1",
               "initialValue": "0",
               "documentation": "",
-              "debug": true,
+              "debug": false,
               "id": "broken-VARIABLE_eaafd140-906b-4b62-891d-eed721506e0d"
             },
             "executionOrder": 0,
@@ -12937,7 +17359,7 @@ END_VAR
               "location": "%MW1",
               "initialValue": "0",
               "documentation": "",
-              "debug": true,
+              "debug": false,
               "id": "broken-VARIABLE_ce647f27-ee53-4e50-85a5-215da9ddb687"
             },
             "executionOrder": 0,
@@ -13918,7 +18340,7 @@ END_VAR
             "width": 28,
             "height": 24
           },
-          "draggable": false,
+          "draggable": true,
           "selectable": true,
           "data": {
             "handles": [
@@ -17628,8 +22050,8 @@ END_VAR
         100
       ],
       "reactFlowViewport": [
-        559,
-        266
+        673,
+        358
       ],
       "nodes": [
         {
@@ -18491,7 +22913,252 @@ END_VAR
           }
         },
         {
-          "id": "CONTACT_f9860560-2bc1-4da8-8710-eb16b2a179ee",
+          "id": "PARALLEL_OPEN_8e08e28f-ebfa-4597-a643-448571095ebe",
+          "type": "parallel",
+          "position": {
+            "x": 23,
+            "y": 233
+          },
+          "height": 2,
+          "width": 4,
+          "measured": {
+            "width": 4,
+            "height": 2
+          },
+          "draggable": false,
+          "selectable": false,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 23,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 1
+                },
+                "id": "input",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "left": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 0
+                },
+                "id": "input-top",
+                "position": "top",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 1
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 4,
+                  "y": 1
+                },
+                "id": "output-right",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "right": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 2
+                },
+                "id": "output-down",
+                "position": "bottom",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "bottom": 1
+                }
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 23,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 1
+                },
+                "id": "input",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "left": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 0
+                },
+                "id": "input-top",
+                "position": "top",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 1
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 4,
+                  "y": 1
+                },
+                "id": "output-right",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "right": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 2
+                },
+                "id": "output-down",
+                "position": "bottom",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "bottom": 1
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 23,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 1
+              },
+              "id": "input",
+              "position": "left",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "visibility": "hidden",
+                "left": 3
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 27,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 4,
+                "y": 1
+              },
+              "id": "output-right",
+              "position": "right",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "visibility": "hidden",
+                "right": 3
+              }
+            },
+            "numericId": "1775157",
+            "parallelInputConnector": {
+              "glbPosition": {
+                "x": 27,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 2,
+                "y": 0
+              },
+              "id": "input-top",
+              "position": "top",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "top": 1
+              }
+            },
+            "parallelOutputConnector": {
+              "glbPosition": {
+                "x": 27,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 2,
+                "y": 2
+              },
+              "id": "output-down",
+              "position": "bottom",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "bottom": 1
+              }
+            },
+            "parallelCloseReference": "PARALLEL_CLOSE_1e19f1de-39d0-4016-aea9-568dc2c9c2da",
+            "type": "open",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "draggable": false,
+            "selectable": false,
+            "deletable": false,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "CONTACT_0b106844-c2ca-451d-8947-a589ceffe5d3",
           "type": "contact",
           "position": {
             "x": 72,
@@ -18632,6 +23299,396 @@ END_VAR
             "draggable": true,
             "selectable": true,
             "deletable": true,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "CONTACT_ef49a4dd-8a41-410f-8514-7729f880aed2",
+          "type": "contact",
+          "position": {
+            "x": 72,
+            "y": 314
+          },
+          "height": 24,
+          "width": 24,
+          "measured": {
+            "width": 24,
+            "height": 24
+          },
+          "draggable": true,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 72,
+                  "y": 326
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 12
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target",
+                "style": {
+                  "left": -3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 96,
+                  "y": 326
+                },
+                "relPosition": {
+                  "x": 24,
+                  "y": 12
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source",
+                "style": {
+                  "right": -3
+                }
+              }
+            ],
+            "variant": "risingEdge",
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 72,
+                  "y": 326
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 12
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target",
+                "style": {
+                  "left": -3
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 96,
+                  "y": 326
+                },
+                "relPosition": {
+                  "x": 24,
+                  "y": 12
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source",
+                "style": {
+                  "right": -3
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 72,
+                "y": 326
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 12
+              },
+              "id": "input",
+              "position": "left",
+              "isConnectable": false,
+              "type": "target",
+              "style": {
+                "left": -3
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 96,
+                "y": 326
+              },
+              "relPosition": {
+                "x": 24,
+                "y": 12
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source",
+              "style": {
+                "right": -3
+              }
+            },
+            "numericId": "8323320",
+            "variable": {
+              "name": "K1_CAN_ON",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
+            },
+            "executionOrder": 0,
+            "draggable": true,
+            "selectable": true,
+            "deletable": true,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "PARALLEL_CLOSE_1e19f1de-39d0-4016-aea9-568dc2c9c2da",
+          "type": "parallel",
+          "position": {
+            "x": 141,
+            "y": 233
+          },
+          "height": 2,
+          "width": 4,
+          "measured": {
+            "width": 4,
+            "height": 2
+          },
+          "draggable": false,
+          "selectable": false,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 141,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 1
+                },
+                "id": "input",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "left": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 2
+                },
+                "id": "input-down",
+                "position": "bottom",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "bottom": 1
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 4,
+                  "y": 1
+                },
+                "id": "output-right",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "right": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 0
+                },
+                "id": "output-top",
+                "position": "top",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 1
+                }
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 141,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 1
+                },
+                "id": "input",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "left": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 2
+                },
+                "id": "input-down",
+                "position": "bottom",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "bottom": 1
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 4,
+                  "y": 1
+                },
+                "id": "output-right",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "right": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 0
+                },
+                "id": "output-top",
+                "position": "top",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 1
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 141,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 1
+              },
+              "id": "input",
+              "position": "left",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "visibility": "hidden",
+                "left": 3
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 145,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 4,
+                "y": 1
+              },
+              "id": "output-right",
+              "position": "right",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "visibility": "hidden",
+                "right": 3
+              }
+            },
+            "numericId": "1192255",
+            "parallelInputConnector": {
+              "glbPosition": {
+                "x": 145,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 2,
+                "y": 2
+              },
+              "id": "input-down",
+              "position": "bottom",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "bottom": 1
+              }
+            },
+            "parallelOutputConnector": {
+              "glbPosition": {
+                "x": 145,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 2,
+                "y": 0
+              },
+              "id": "output-top",
+              "position": "top",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "top": 1
+              }
+            },
+            "parallelOpenReference": "PARALLEL_OPEN_8e08e28f-ebfa-4597-a643-448571095ebe",
+            "type": "close",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "draggable": false,
+            "selectable": false,
+            "deletable": false,
             "hasDivergence": false
           }
         },
@@ -19407,16 +24464,16 @@ END_VAR
           }
         },
         {
-          "id": "COIL_674dab01-85d7-487a-8a01-b7de5002151c",
-          "type": "coil",
+          "id": "CONTACT_a84e321f-3523-4807-a84a-a6b9d8bf0d51",
+          "type": "contact",
           "position": {
             "x": 418,
             "y": 38
           },
           "height": 24,
-          "width": 28,
+          "width": 24,
           "measured": {
-            "width": 28,
+            "width": 24,
             "height": 24
           },
           "draggable": true,
@@ -19442,11 +24499,11 @@ END_VAR
               },
               {
                 "glbPosition": {
-                  "x": 446,
+                  "x": 442,
                   "y": 50
                 },
                 "relPosition": {
-                  "x": 28,
+                  "x": 24,
                   "y": 12
                 },
                 "id": "output",
@@ -19458,7 +24515,7 @@ END_VAR
                 }
               }
             ],
-            "variant": "default",
+            "variant": "negated",
             "inputHandles": [
               {
                 "glbPosition": {
@@ -19481,11 +24538,11 @@ END_VAR
             "outputHandles": [
               {
                 "glbPosition": {
-                  "x": 446,
+                  "x": 442,
                   "y": 50
                 },
                 "relPosition": {
-                  "x": 28,
+                  "x": 24,
                   "y": 12
                 },
                 "id": "output",
@@ -19516,7 +24573,152 @@ END_VAR
             },
             "outputConnector": {
               "glbPosition": {
-                "x": 446,
+                "x": 442,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 24,
+                "y": 12
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source",
+              "style": {
+                "right": -3
+              }
+            },
+            "numericId": "6342523",
+            "variable": {
+              "name": "K1_CAN_OFF",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
+            },
+            "executionOrder": 0,
+            "draggable": true,
+            "selectable": true,
+            "deletable": true,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "COIL_674dab01-85d7-487a-8a01-b7de5002151c",
+          "type": "coil",
+          "position": {
+            "x": 532,
+            "y": 38
+          },
+          "height": 24,
+          "width": 28,
+          "measured": {
+            "width": 28,
+            "height": 24
+          },
+          "draggable": true,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 532,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 12
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target",
+                "style": {
+                  "left": -3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 560,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 28,
+                  "y": 12
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source",
+                "style": {
+                  "right": -3
+                }
+              }
+            ],
+            "variant": "default",
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 532,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 12
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target",
+                "style": {
+                  "left": -3
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 560,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 28,
+                  "y": 12
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source",
+                "style": {
+                  "right": -3
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 532,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 12
+              },
+              "id": "input",
+              "position": "left",
+              "isConnectable": false,
+              "type": "target",
+              "style": {
+                "left": -3
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 560,
                 "y": 50
               },
               "relPosition": {
@@ -19555,7 +24757,7 @@ END_VAR
           "id": "right-rail-rung_main_22674f30-a1b1-44f3-a654-2152d319e283",
           "type": "powerRail",
           "position": {
-            "x": 556,
+            "x": 670,
             "y": 30
           },
           "height": 40,
@@ -19585,7 +24787,7 @@ END_VAR
                   "top": 20,
                   "left": -3
                 },
-                "x": 556
+                "x": 670
               }
             ],
             "inputHandles": [
@@ -19705,20 +24907,6 @@ END_VAR
           "targetHandle": "input-down"
         },
         {
-          "id": "e_PARALLEL_OPEN_fd7444f0-bb82-4041-8d38-fd88893cdb89_CONTACT_f9860560-2bc1-4da8-8710-eb16b2a179ee__output-down_input",
-          "source": "PARALLEL_OPEN_fd7444f0-bb82-4041-8d38-fd88893cdb89",
-          "sourceHandle": "output-down",
-          "target": "CONTACT_f9860560-2bc1-4da8-8710-eb16b2a179ee",
-          "targetHandle": "input"
-        },
-        {
-          "id": "e_CONTACT_f9860560-2bc1-4da8-8710-eb16b2a179ee_PARALLEL_CLOSE_a4633fa9-4fd7-4d55-96f7-6edcd9434826__output_input-down",
-          "source": "CONTACT_f9860560-2bc1-4da8-8710-eb16b2a179ee",
-          "sourceHandle": "output",
-          "target": "PARALLEL_CLOSE_a4633fa9-4fd7-4d55-96f7-6edcd9434826",
-          "targetHandle": "input-down"
-        },
-        {
           "id": "e_CONTACT_9dccb39e-c045-4e4c-b430-6de44739a887_CONTACT_bb7c5912-2219-4f26-9e51-e97a080c0c75__output_input",
           "source": "CONTACT_9dccb39e-c045-4e4c-b430-6de44739a887",
           "sourceHandle": "output",
@@ -19726,11 +24914,60 @@ END_VAR
           "targetHandle": "input"
         },
         {
-          "id": "e_CONTACT_bb7c5912-2219-4f26-9e51-e97a080c0c75_COIL_674dab01-85d7-487a-8a01-b7de5002151c__output_input",
+          "id": "e_PARALLEL_OPEN_fd7444f0-bb82-4041-8d38-fd88893cdb89_PARALLEL_OPEN_8e08e28f-ebfa-4597-a643-448571095ebe__output-down_input-top",
+          "source": "PARALLEL_OPEN_fd7444f0-bb82-4041-8d38-fd88893cdb89",
+          "sourceHandle": "output-down",
+          "target": "PARALLEL_OPEN_8e08e28f-ebfa-4597-a643-448571095ebe",
+          "targetHandle": "input-top"
+        },
+        {
+          "id": "e_PARALLEL_OPEN_8e08e28f-ebfa-4597-a643-448571095ebe_CONTACT_0b106844-c2ca-451d-8947-a589ceffe5d3__output-right_input",
+          "source": "PARALLEL_OPEN_8e08e28f-ebfa-4597-a643-448571095ebe",
+          "sourceHandle": "output-right",
+          "target": "CONTACT_0b106844-c2ca-451d-8947-a589ceffe5d3",
+          "targetHandle": "input"
+        },
+        {
+          "id": "e_CONTACT_0b106844-c2ca-451d-8947-a589ceffe5d3_PARALLEL_CLOSE_1e19f1de-39d0-4016-aea9-568dc2c9c2da__output_input",
+          "source": "CONTACT_0b106844-c2ca-451d-8947-a589ceffe5d3",
+          "sourceHandle": "output",
+          "target": "PARALLEL_CLOSE_1e19f1de-39d0-4016-aea9-568dc2c9c2da",
+          "targetHandle": "input"
+        },
+        {
+          "id": "e_PARALLEL_CLOSE_1e19f1de-39d0-4016-aea9-568dc2c9c2da_PARALLEL_CLOSE_a4633fa9-4fd7-4d55-96f7-6edcd9434826__output-top_input-down",
+          "source": "PARALLEL_CLOSE_1e19f1de-39d0-4016-aea9-568dc2c9c2da",
+          "sourceHandle": "output-top",
+          "target": "PARALLEL_CLOSE_a4633fa9-4fd7-4d55-96f7-6edcd9434826",
+          "targetHandle": "input-down"
+        },
+        {
+          "id": "e_CONTACT_bb7c5912-2219-4f26-9e51-e97a080c0c75_CONTACT_a84e321f-3523-4807-a84a-a6b9d8bf0d51__output_input",
           "source": "CONTACT_bb7c5912-2219-4f26-9e51-e97a080c0c75",
+          "sourceHandle": "output",
+          "target": "CONTACT_a84e321f-3523-4807-a84a-a6b9d8bf0d51",
+          "targetHandle": "input"
+        },
+        {
+          "id": "e_CONTACT_a84e321f-3523-4807-a84a-a6b9d8bf0d51_COIL_674dab01-85d7-487a-8a01-b7de5002151c__output_input",
+          "source": "CONTACT_a84e321f-3523-4807-a84a-a6b9d8bf0d51",
           "sourceHandle": "output",
           "target": "COIL_674dab01-85d7-487a-8a01-b7de5002151c",
           "targetHandle": "input"
+        },
+        {
+          "id": "e_PARALLEL_OPEN_8e08e28f-ebfa-4597-a643-448571095ebe_CONTACT_ef49a4dd-8a41-410f-8514-7729f880aed2__output-down_input",
+          "source": "PARALLEL_OPEN_8e08e28f-ebfa-4597-a643-448571095ebe",
+          "sourceHandle": "output-down",
+          "target": "CONTACT_ef49a4dd-8a41-410f-8514-7729f880aed2",
+          "targetHandle": "input"
+        },
+        {
+          "id": "e_CONTACT_ef49a4dd-8a41-410f-8514-7729f880aed2_PARALLEL_CLOSE_1e19f1de-39d0-4016-aea9-568dc2c9c2da__output_input-down",
+          "source": "CONTACT_ef49a4dd-8a41-410f-8514-7729f880aed2",
+          "sourceHandle": "output",
+          "target": "PARALLEL_CLOSE_1e19f1de-39d0-4016-aea9-568dc2c9c2da",
+          "targetHandle": "input-down"
         }
       ]
     },
@@ -19742,8 +24979,8 @@ END_VAR
         100
       ],
       "reactFlowViewport": [
-        559,
-        266
+        673,
+        358
       ],
       "nodes": [
         {
@@ -20605,7 +25842,252 @@ END_VAR
           }
         },
         {
-          "id": "CONTACT_80eaf292-adbb-43c2-a755-d4781694599e",
+          "id": "PARALLEL_OPEN_cd9fef37-3171-4e30-a8c7-95b0cc166906",
+          "type": "parallel",
+          "position": {
+            "x": 23,
+            "y": 233
+          },
+          "height": 2,
+          "width": 4,
+          "measured": {
+            "width": 4,
+            "height": 2
+          },
+          "draggable": false,
+          "selectable": false,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 23,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 1
+                },
+                "id": "input",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "left": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 0
+                },
+                "id": "input-top",
+                "position": "top",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 1
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 4,
+                  "y": 1
+                },
+                "id": "output-right",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "right": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 2
+                },
+                "id": "output-down",
+                "position": "bottom",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "bottom": 1
+                }
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 23,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 1
+                },
+                "id": "input",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "left": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 0
+                },
+                "id": "input-top",
+                "position": "top",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "top": 1
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 4,
+                  "y": 1
+                },
+                "id": "output-right",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "right": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 27,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 2
+                },
+                "id": "output-down",
+                "position": "bottom",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "bottom": 1
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 23,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 1
+              },
+              "id": "input",
+              "position": "left",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "visibility": "hidden",
+                "left": 3
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 27,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 4,
+                "y": 1
+              },
+              "id": "output-right",
+              "position": "right",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "visibility": "hidden",
+                "right": 3
+              }
+            },
+            "numericId": "3202714",
+            "parallelInputConnector": {
+              "glbPosition": {
+                "x": 27,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 2,
+                "y": 0
+              },
+              "id": "input-top",
+              "position": "top",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "top": 1
+              }
+            },
+            "parallelOutputConnector": {
+              "glbPosition": {
+                "x": 27,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 2,
+                "y": 2
+              },
+              "id": "output-down",
+              "position": "bottom",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "bottom": 1
+              }
+            },
+            "parallelCloseReference": "PARALLEL_CLOSE_c0c396fc-878b-48dd-91d6-7413aebb6bb2",
+            "type": "open",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "draggable": false,
+            "selectable": false,
+            "deletable": false,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "CONTACT_0c5ce455-a58d-4bca-a15d-7ce1d9332836",
           "type": "contact",
           "position": {
             "x": 72,
@@ -20746,6 +26228,387 @@ END_VAR
             "draggable": true,
             "selectable": true,
             "deletable": true,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "CONTACT_afd2912f-62c0-4398-89d7-fa88fa1c59aa",
+          "type": "contact",
+          "position": {
+            "x": 72,
+            "y": 314
+          },
+          "height": 24,
+          "width": 24,
+          "measured": {
+            "width": 24,
+            "height": 24
+          },
+          "draggable": true,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 72,
+                  "y": 326
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 12
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target",
+                "style": {
+                  "left": -3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 96,
+                  "y": 326
+                },
+                "relPosition": {
+                  "x": 24,
+                  "y": 12
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source",
+                "style": {
+                  "right": -3
+                }
+              }
+            ],
+            "variant": "risingEdge",
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 72,
+                  "y": 326
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 12
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target",
+                "style": {
+                  "left": -3
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 96,
+                  "y": 326
+                },
+                "relPosition": {
+                  "x": 24,
+                  "y": 12
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source",
+                "style": {
+                  "right": -3
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 72,
+                "y": 326
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 12
+              },
+              "id": "input",
+              "position": "left",
+              "isConnectable": false,
+              "type": "target",
+              "style": {
+                "left": -3
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 96,
+                "y": 326
+              },
+              "relPosition": {
+                "x": 24,
+                "y": 12
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source",
+              "style": {
+                "right": -3
+              }
+            },
+            "numericId": "10611828",
+            "variable": {
+              "name": "K2_CAN_ON"
+            },
+            "executionOrder": 0,
+            "draggable": true,
+            "selectable": true,
+            "deletable": true,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "PARALLEL_CLOSE_c0c396fc-878b-48dd-91d6-7413aebb6bb2",
+          "type": "parallel",
+          "position": {
+            "x": 141,
+            "y": 233
+          },
+          "height": 2,
+          "width": 4,
+          "measured": {
+            "width": 4,
+            "height": 2
+          },
+          "draggable": false,
+          "selectable": false,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 141,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 1
+                },
+                "id": "input",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "left": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 2
+                },
+                "id": "input-down",
+                "position": "bottom",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "bottom": 1
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 4,
+                  "y": 1
+                },
+                "id": "output-right",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "right": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 0
+                },
+                "id": "output-top",
+                "position": "top",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 1
+                }
+              }
+            ],
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 141,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 1
+                },
+                "id": "input",
+                "position": "left",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "left": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 2
+                },
+                "id": "input-down",
+                "position": "bottom",
+                "type": "target",
+                "isConnectable": false,
+                "style": {
+                  "bottom": 1
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 4,
+                  "y": 1
+                },
+                "id": "output-right",
+                "position": "right",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "visibility": "hidden",
+                  "right": 3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 145,
+                  "y": 234
+                },
+                "relPosition": {
+                  "x": 2,
+                  "y": 0
+                },
+                "id": "output-top",
+                "position": "top",
+                "type": "source",
+                "isConnectable": false,
+                "style": {
+                  "top": 1
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 141,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 1
+              },
+              "id": "input",
+              "position": "left",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "visibility": "hidden",
+                "left": 3
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 145,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 4,
+                "y": 1
+              },
+              "id": "output-right",
+              "position": "right",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "visibility": "hidden",
+                "right": 3
+              }
+            },
+            "numericId": "7440311",
+            "parallelInputConnector": {
+              "glbPosition": {
+                "x": 145,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 2,
+                "y": 2
+              },
+              "id": "input-down",
+              "position": "bottom",
+              "type": "target",
+              "isConnectable": false,
+              "style": {
+                "bottom": 1
+              }
+            },
+            "parallelOutputConnector": {
+              "glbPosition": {
+                "x": 145,
+                "y": 234
+              },
+              "relPosition": {
+                "x": 2,
+                "y": 0
+              },
+              "id": "output-top",
+              "position": "top",
+              "type": "source",
+              "isConnectable": false,
+              "style": {
+                "top": 1
+              }
+            },
+            "parallelOpenReference": "PARALLEL_OPEN_cd9fef37-3171-4e30-a8c7-95b0cc166906",
+            "type": "close",
+            "variable": {
+              "name": ""
+            },
+            "executionOrder": 0,
+            "draggable": false,
+            "selectable": false,
+            "deletable": false,
             "hasDivergence": false
           }
         },
@@ -21521,16 +27384,16 @@ END_VAR
           }
         },
         {
-          "id": "COIL_bca97ef9-51e8-4a07-b9c7-63b4ec2339dc",
-          "type": "coil",
+          "id": "CONTACT_8f4c7025-f2a8-4ef6-9492-37a43a2f1a54",
+          "type": "contact",
           "position": {
             "x": 418,
             "y": 38
           },
           "height": 24,
-          "width": 28,
+          "width": 24,
           "measured": {
-            "width": 28,
+            "width": 24,
             "height": 24
           },
           "draggable": true,
@@ -21556,11 +27419,11 @@ END_VAR
               },
               {
                 "glbPosition": {
-                  "x": 446,
+                  "x": 442,
                   "y": 50
                 },
                 "relPosition": {
-                  "x": 28,
+                  "x": 24,
                   "y": 12
                 },
                 "id": "output",
@@ -21572,7 +27435,7 @@ END_VAR
                 }
               }
             ],
-            "variant": "default",
+            "variant": "negated",
             "inputHandles": [
               {
                 "glbPosition": {
@@ -21595,11 +27458,11 @@ END_VAR
             "outputHandles": [
               {
                 "glbPosition": {
-                  "x": 446,
+                  "x": 442,
                   "y": 50
                 },
                 "relPosition": {
-                  "x": 28,
+                  "x": 24,
                   "y": 12
                 },
                 "id": "output",
@@ -21630,7 +27493,152 @@ END_VAR
             },
             "outputConnector": {
               "glbPosition": {
-                "x": 446,
+                "x": 442,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 24,
+                "y": 12
+              },
+              "id": "output",
+              "position": "right",
+              "isConnectable": false,
+              "type": "source",
+              "style": {
+                "right": -3
+              }
+            },
+            "numericId": "5784550",
+            "variable": {
+              "name": "K2_CAN_OFF",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
+            },
+            "executionOrder": 0,
+            "draggable": true,
+            "selectable": true,
+            "deletable": true,
+            "hasDivergence": false
+          }
+        },
+        {
+          "id": "COIL_bca97ef9-51e8-4a07-b9c7-63b4ec2339dc",
+          "type": "coil",
+          "position": {
+            "x": 532,
+            "y": 38
+          },
+          "height": 24,
+          "width": 28,
+          "measured": {
+            "width": 28,
+            "height": 24
+          },
+          "draggable": true,
+          "selectable": true,
+          "data": {
+            "handles": [
+              {
+                "glbPosition": {
+                  "x": 532,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 12
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target",
+                "style": {
+                  "left": -3
+                }
+              },
+              {
+                "glbPosition": {
+                  "x": 560,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 28,
+                  "y": 12
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source",
+                "style": {
+                  "right": -3
+                }
+              }
+            ],
+            "variant": "default",
+            "inputHandles": [
+              {
+                "glbPosition": {
+                  "x": 532,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 0,
+                  "y": 12
+                },
+                "id": "input",
+                "position": "left",
+                "isConnectable": false,
+                "type": "target",
+                "style": {
+                  "left": -3
+                }
+              }
+            ],
+            "outputHandles": [
+              {
+                "glbPosition": {
+                  "x": 560,
+                  "y": 50
+                },
+                "relPosition": {
+                  "x": 28,
+                  "y": 12
+                },
+                "id": "output",
+                "position": "right",
+                "isConnectable": false,
+                "type": "source",
+                "style": {
+                  "right": -3
+                }
+              }
+            ],
+            "inputConnector": {
+              "glbPosition": {
+                "x": 532,
+                "y": 50
+              },
+              "relPosition": {
+                "x": 0,
+                "y": 12
+              },
+              "id": "input",
+              "position": "left",
+              "isConnectable": false,
+              "type": "target",
+              "style": {
+                "left": -3
+              }
+            },
+            "outputConnector": {
+              "glbPosition": {
+                "x": 560,
                 "y": 50
               },
               "relPosition": {
@@ -21669,7 +27677,7 @@ END_VAR
           "id": "right-rail-rung_main_22674f30-a1b1-44f3-a654-2152d319e283",
           "type": "powerRail",
           "position": {
-            "x": 556,
+            "x": 670,
             "y": 30
           },
           "height": 40,
@@ -21699,7 +27707,7 @@ END_VAR
                   "top": 20,
                   "left": -3
                 },
-                "x": 556
+                "x": 670
               }
             ],
             "inputHandles": [
@@ -21819,20 +27827,6 @@ END_VAR
           "targetHandle": "input-down"
         },
         {
-          "id": "e_PARALLEL_OPEN_52b7f121-5182-40e5-b892-728ff2e77be3_CONTACT_80eaf292-adbb-43c2-a755-d4781694599e__output-down_input",
-          "source": "PARALLEL_OPEN_52b7f121-5182-40e5-b892-728ff2e77be3",
-          "sourceHandle": "output-down",
-          "target": "CONTACT_80eaf292-adbb-43c2-a755-d4781694599e",
-          "targetHandle": "input"
-        },
-        {
-          "id": "e_CONTACT_80eaf292-adbb-43c2-a755-d4781694599e_PARALLEL_CLOSE_b99fc2bc-100c-42ba-abfe-a41664abfd1c__output_input-down",
-          "source": "CONTACT_80eaf292-adbb-43c2-a755-d4781694599e",
-          "sourceHandle": "output",
-          "target": "PARALLEL_CLOSE_b99fc2bc-100c-42ba-abfe-a41664abfd1c",
-          "targetHandle": "input-down"
-        },
-        {
           "id": "e_CONTACT_adbb1a6b-9ae8-4bc2-852c-03f69f6a75fc_CONTACT_dfdacf1a-9446-4591-8fd5-ddfb4098570c__output_input",
           "source": "CONTACT_adbb1a6b-9ae8-4bc2-852c-03f69f6a75fc",
           "sourceHandle": "output",
@@ -21840,11 +27834,60 @@ END_VAR
           "targetHandle": "input"
         },
         {
-          "id": "e_CONTACT_dfdacf1a-9446-4591-8fd5-ddfb4098570c_COIL_bca97ef9-51e8-4a07-b9c7-63b4ec2339dc__output_input",
+          "id": "e_PARALLEL_OPEN_52b7f121-5182-40e5-b892-728ff2e77be3_PARALLEL_OPEN_cd9fef37-3171-4e30-a8c7-95b0cc166906__output-down_input-top",
+          "source": "PARALLEL_OPEN_52b7f121-5182-40e5-b892-728ff2e77be3",
+          "sourceHandle": "output-down",
+          "target": "PARALLEL_OPEN_cd9fef37-3171-4e30-a8c7-95b0cc166906",
+          "targetHandle": "input-top"
+        },
+        {
+          "id": "e_PARALLEL_OPEN_cd9fef37-3171-4e30-a8c7-95b0cc166906_CONTACT_0c5ce455-a58d-4bca-a15d-7ce1d9332836__output-right_input",
+          "source": "PARALLEL_OPEN_cd9fef37-3171-4e30-a8c7-95b0cc166906",
+          "sourceHandle": "output-right",
+          "target": "CONTACT_0c5ce455-a58d-4bca-a15d-7ce1d9332836",
+          "targetHandle": "input"
+        },
+        {
+          "id": "e_CONTACT_0c5ce455-a58d-4bca-a15d-7ce1d9332836_PARALLEL_CLOSE_c0c396fc-878b-48dd-91d6-7413aebb6bb2__output_input",
+          "source": "CONTACT_0c5ce455-a58d-4bca-a15d-7ce1d9332836",
+          "sourceHandle": "output",
+          "target": "PARALLEL_CLOSE_c0c396fc-878b-48dd-91d6-7413aebb6bb2",
+          "targetHandle": "input"
+        },
+        {
+          "id": "e_PARALLEL_CLOSE_c0c396fc-878b-48dd-91d6-7413aebb6bb2_PARALLEL_CLOSE_b99fc2bc-100c-42ba-abfe-a41664abfd1c__output-top_input-down",
+          "source": "PARALLEL_CLOSE_c0c396fc-878b-48dd-91d6-7413aebb6bb2",
+          "sourceHandle": "output-top",
+          "target": "PARALLEL_CLOSE_b99fc2bc-100c-42ba-abfe-a41664abfd1c",
+          "targetHandle": "input-down"
+        },
+        {
+          "id": "e_CONTACT_dfdacf1a-9446-4591-8fd5-ddfb4098570c_CONTACT_8f4c7025-f2a8-4ef6-9492-37a43a2f1a54__output_input",
           "source": "CONTACT_dfdacf1a-9446-4591-8fd5-ddfb4098570c",
+          "sourceHandle": "output",
+          "target": "CONTACT_8f4c7025-f2a8-4ef6-9492-37a43a2f1a54",
+          "targetHandle": "input"
+        },
+        {
+          "id": "e_CONTACT_8f4c7025-f2a8-4ef6-9492-37a43a2f1a54_COIL_bca97ef9-51e8-4a07-b9c7-63b4ec2339dc__output_input",
+          "source": "CONTACT_8f4c7025-f2a8-4ef6-9492-37a43a2f1a54",
           "sourceHandle": "output",
           "target": "COIL_bca97ef9-51e8-4a07-b9c7-63b4ec2339dc",
           "targetHandle": "input"
+        },
+        {
+          "id": "e_PARALLEL_OPEN_cd9fef37-3171-4e30-a8c7-95b0cc166906_CONTACT_afd2912f-62c0-4398-89d7-fa88fa1c59aa__output-down_input",
+          "source": "PARALLEL_OPEN_cd9fef37-3171-4e30-a8c7-95b0cc166906",
+          "sourceHandle": "output-down",
+          "target": "CONTACT_afd2912f-62c0-4398-89d7-fa88fa1c59aa",
+          "targetHandle": "input"
+        },
+        {
+          "id": "e_CONTACT_afd2912f-62c0-4398-89d7-fa88fa1c59aa_PARALLEL_CLOSE_c0c396fc-878b-48dd-91d6-7413aebb6bb2__output_input-down",
+          "source": "CONTACT_afd2912f-62c0-4398-89d7-fa88fa1c59aa",
+          "sourceHandle": "output",
+          "target": "PARALLEL_CLOSE_c0c396fc-878b-48dd-91d6-7413aebb6bb2",
+          "targetHandle": "input-down"
         }
       ]
     }

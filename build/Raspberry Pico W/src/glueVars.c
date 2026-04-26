@@ -177,6 +177,8 @@ void glueVars()
     
     int_memory_ptr[1] = (IEC_UINT *)__MW1;
     
+    int_memory_ptr[2] = (IEC_UINT *)__MW2;
+    
 }
 
 void updateTime()

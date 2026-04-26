@@ -1,3 +1,230 @@
+void BOOL_ON_WORD_init__(BOOL_ON_WORD *data__, BOOL retain) {
+  __INIT_VAR(data__->EN,__BOOL_LITERAL(TRUE),retain)
+  __INIT_VAR(data__->ENO,__BOOL_LITERAL(TRUE),retain)
+  __INIT_VAR(data__->B_IN0,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN1,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN2,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN3,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN4,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN5,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN6,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN7,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN8,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN9,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN10,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN11,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN12,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN13,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN14,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_IN15,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->WORD_OUT,0,retain)
+}
+
+// Code part
+void BOOL_ON_WORD_body__(BOOL_ON_WORD *data__) {
+  // Control execution
+  if (!__GET_VAR(data__->EN)) {
+    __SET_VAR(data__->,ENO,,__BOOL_LITERAL(FALSE));
+    return;
+  }
+  else {
+    __SET_VAR(data__->,ENO,,__BOOL_LITERAL(TRUE));
+  }
+  // Initialise TEMP variables
+
+  __SET_VAR(data__->,WORD_OUT,,0);
+  if (__GET_VAR(data__->B_IN0,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x1));
+  };
+  if (__GET_VAR(data__->B_IN1,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x2));
+  };
+  if (__GET_VAR(data__->B_IN2,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x4));
+  };
+  if (__GET_VAR(data__->B_IN3,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x8));
+  };
+  if (__GET_VAR(data__->B_IN4,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x10));
+  };
+  if (__GET_VAR(data__->B_IN5,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x20));
+  };
+  if (__GET_VAR(data__->B_IN6,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x40));
+  };
+  if (__GET_VAR(data__->B_IN7,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x80));
+  };
+  if (__GET_VAR(data__->B_IN8,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x100));
+  };
+  if (__GET_VAR(data__->B_IN9,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x200));
+  };
+  if (__GET_VAR(data__->B_IN10,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x400));
+  };
+  if (__GET_VAR(data__->B_IN11,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x800));
+  };
+  if (__GET_VAR(data__->B_IN12,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x1000));
+  };
+  if (__GET_VAR(data__->B_IN13,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x2000));
+  };
+  if (__GET_VAR(data__->B_IN14,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x4000));
+  };
+  if (__GET_VAR(data__->B_IN15,)) {
+    __SET_VAR(data__->,WORD_OUT,,(__GET_VAR(data__->WORD_OUT,) | 0x8000));
+  };
+
+  goto __end;
+
+__end:
+  return;
+} // BOOL_ON_WORD_body__() 
+
+
+
+
+
+void CAN_INTERFACE_init__(CAN_INTERFACE *data__, BOOL retain) {
+  __INIT_VAR(data__->EN,__BOOL_LITERAL(TRUE),retain)
+  __INIT_VAR(data__->ENO,__BOOL_LITERAL(TRUE),retain)
+  __INIT_VAR(data__->ID_FILTER,300,retain)
+  __INIT_VAR(data__->ID_STATE,310,retain)
+  __INIT_VAR(data__->STATE_PERIOD,500,retain)
+  __INIT_VAR(data__->INPUT_ADDRESS,0,retain)
+  __INIT_VAR(data__->NUM_OF_INPUT,1,retain)
+  __INIT_VAR(data__->OUTPUT_ADDRESS,2,retain)
+  __INIT_VAR(data__->NUM_OF_OUTPUT,1,retain)
+  __INIT_VAR(data__->ERR,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->HASBEENINITIALIZED,0,retain)
+}
+
+// Code part
+void CAN_INTERFACE_body__(CAN_INTERFACE *data__) {
+  // Control execution
+  if (!__GET_VAR(data__->EN)) {
+    __SET_VAR(data__->,ENO,,__BOOL_LITERAL(FALSE));
+    return;
+  }
+  else {
+    __SET_VAR(data__->,ENO,,__BOOL_LITERAL(TRUE));
+  }
+  // Initialise TEMP variables
+
+  #define GetFbVar(var,...) __GET_VAR(data__->var,__VA_ARGS__)
+  #define SetFbVar(var,val,...) __SET_VAR(data__->,var,__VA_ARGS__,val)
+
+  CAN_INTERFACE_VARS vars;
+  vars.ID_FILTER = &data__->ID_FILTER.value;
+  vars.ID_STATE = &data__->ID_STATE.value;
+  vars.STATE_PERIOD = &data__->STATE_PERIOD.value;
+  vars.INPUT_ADDRESS = &data__->INPUT_ADDRESS.value;
+  vars.NUM_OF_INPUT = &data__->NUM_OF_INPUT.value;
+  vars.OUTPUT_ADDRESS = &data__->OUTPUT_ADDRESS.value;
+  vars.NUM_OF_OUTPUT = &data__->NUM_OF_OUTPUT.value;
+  vars.ERR = &data__->ERR.value;
+  
+  #undef GetFbVar
+  #undef SetFbVar
+;
+  if ((__GET_VAR(data__->HASBEENINITIALIZED,) == __BOOL_LITERAL(FALSE))) {
+    #define GetFbVar(var,...) __GET_VAR(data__->var,__VA_ARGS__)
+    #define SetFbVar(var,val,...) __SET_VAR(data__->,var,__VA_ARGS__,val)
+
+  can_interface_setup(&vars);
+  
+    #undef GetFbVar
+    #undef SetFbVar
+;
+    __SET_VAR(data__->,HASBEENINITIALIZED,,__BOOL_LITERAL(TRUE));
+  };
+  #define GetFbVar(var,...) __GET_VAR(data__->var,__VA_ARGS__)
+  #define SetFbVar(var,val,...) __SET_VAR(data__->,var,__VA_ARGS__,val)
+
+  can_interface_loop(&vars);
+  
+  #undef GetFbVar
+  #undef SetFbVar
+;
+
+  goto __end;
+
+__end:
+  return;
+} // CAN_INTERFACE_body__() 
+
+
+
+
+
+void WORD_ON_BOOL_init__(WORD_ON_BOOL *data__, BOOL retain) {
+  __INIT_VAR(data__->EN,__BOOL_LITERAL(TRUE),retain)
+  __INIT_VAR(data__->ENO,__BOOL_LITERAL(TRUE),retain)
+  __INIT_VAR(data__->WORD_IN,0,retain)
+  __INIT_VAR(data__->B_OUT0,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT1,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT2,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT3,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT4,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT5,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT6,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT7,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT8,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT9,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT10,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT11,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT12,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT13,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT14,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->B_OUT15,__BOOL_LITERAL(FALSE),retain)
+}
+
+// Code part
+void WORD_ON_BOOL_body__(WORD_ON_BOOL *data__) {
+  // Control execution
+  if (!__GET_VAR(data__->EN)) {
+    __SET_VAR(data__->,ENO,,__BOOL_LITERAL(FALSE));
+    return;
+  }
+  else {
+    __SET_VAR(data__->,ENO,,__BOOL_LITERAL(TRUE));
+  }
+  // Initialise TEMP variables
+
+  __SET_VAR(data__->,B_OUT0,,((__GET_VAR(data__->WORD_IN,) & 0x1) != 0));
+  __SET_VAR(data__->,B_OUT1,,((__GET_VAR(data__->WORD_IN,) & 0x2) != 0));
+  __SET_VAR(data__->,B_OUT2,,((__GET_VAR(data__->WORD_IN,) & 0x4) != 0));
+  __SET_VAR(data__->,B_OUT3,,((__GET_VAR(data__->WORD_IN,) & 0x8) != 0));
+  __SET_VAR(data__->,B_OUT4,,((__GET_VAR(data__->WORD_IN,) & 0x10) != 0));
+  __SET_VAR(data__->,B_OUT5,,((__GET_VAR(data__->WORD_IN,) & 0x20) != 0));
+  __SET_VAR(data__->,B_OUT6,,((__GET_VAR(data__->WORD_IN,) & 0x40) != 0));
+  __SET_VAR(data__->,B_OUT7,,((__GET_VAR(data__->WORD_IN,) & 0x80) != 0));
+  __SET_VAR(data__->,B_OUT8,,((__GET_VAR(data__->WORD_IN,) & 0x100) != 0));
+  __SET_VAR(data__->,B_OUT9,,((__GET_VAR(data__->WORD_IN,) & 0x200) != 0));
+  __SET_VAR(data__->,B_OUT10,,((__GET_VAR(data__->WORD_IN,) & 0x400) != 0));
+  __SET_VAR(data__->,B_OUT11,,((__GET_VAR(data__->WORD_IN,) & 0x800) != 0));
+  __SET_VAR(data__->,B_OUT12,,((__GET_VAR(data__->WORD_IN,) & 0x1000) != 0));
+  __SET_VAR(data__->,B_OUT13,,((__GET_VAR(data__->WORD_IN,) & 0x2000) != 0));
+  __SET_VAR(data__->,B_OUT14,,((__GET_VAR(data__->WORD_IN,) & 0x4000) != 0));
+  __SET_VAR(data__->,B_OUT15,,((__GET_VAR(data__->WORD_IN,) & 0x8000) != 0));
+
+  goto __end;
+
+__end:
+  return;
+} // WORD_ON_BOOL_body__() 
+
+
+
+
+
 static inline BOOL __MAIN_EQ__BOOL__WORD1(BOOL EN,
   UINT __PARAM_COUNT,
   WORD IN1,
@@ -5,13 +232,13 @@ static inline BOOL __MAIN_EQ__BOOL__WORD1(BOOL EN,
   MAIN *data__)
 {
   BOOL __res;
-  BOOL __TMP_ENO = __GET_VAR(data__->_TMP_EQ3776762_ENO,);
+  BOOL __TMP_ENO = __GET_VAR(data__->_TMP_EQ5689106_ENO,);
   __res = EQ__BOOL__WORD(EN,
     &__TMP_ENO,
     __PARAM_COUNT,
     IN1,
     IN2);
-  __SET_VAR(,data__->_TMP_EQ3776762_ENO,,__TMP_ENO);
+  __SET_VAR(,data__->_TMP_EQ5689106_ENO,,__TMP_ENO);
   return __res;
 }
 
@@ -22,13 +249,13 @@ static inline BOOL __MAIN_EQ__BOOL__WORD2(BOOL EN,
   MAIN *data__)
 {
   BOOL __res;
-  BOOL __TMP_ENO = __GET_VAR(data__->_TMP_EQ3354236_ENO,);
+  BOOL __TMP_ENO = __GET_VAR(data__->_TMP_EQ5766092_ENO,);
   __res = EQ__BOOL__WORD(EN,
     &__TMP_ENO,
     __PARAM_COUNT,
     IN1,
     IN2);
-  __SET_VAR(,data__->_TMP_EQ3354236_ENO,,__TMP_ENO);
+  __SET_VAR(,data__->_TMP_EQ5766092_ENO,,__TMP_ENO);
   return __res;
 }
 
@@ -175,15 +402,17 @@ static inline WORD __MAIN_MOVE__WORD__WORD12(BOOL EN,
 }
 
 void MAIN_init__(MAIN *data__, BOOL retain) {
+  __INIT_VAR(data__->CAN_ERR,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->K1_CAN_ON,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->K2_CAN_ON,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->K1_CAN_OFF,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->K2_CAN_OFF,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->BTN_ON_1_TMP,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->BTN_ON_2_TMP,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->BTN_OFF_1_TMP,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->BTN_OFF_2_TMP,__BOOL_LITERAL(FALSE),retain)
-  TON_init__(&data__->TON0,retain);
   __INIT_VAR(data__->TON0_TMP_ON,__BOOL_LITERAL(FALSE),retain)
-  TON_init__(&data__->TON1,retain);
   __INIT_VAR(data__->TON1_TMP_ON,__BOOL_LITERAL(FALSE),retain)
-  TON_init__(&data__->TON2,retain);
   __INIT_VAR(data__->TON2_TMP_ON,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->TON3_TMP_ON,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->CYCLE_RUN,__BOOL_LITERAL(FALSE),retain)
@@ -192,8 +421,13 @@ void MAIN_init__(MAIN *data__, BOOL retain) {
   __INIT_VAR(data__->CMD_2,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->CMD_3,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->CMD_4,__BOOL_LITERAL(FALSE),retain)
+  TON_init__(&data__->TON0,retain);
+  TON_init__(&data__->TON1,retain);
+  TON_init__(&data__->TON2,retain);
   TON_init__(&data__->TON3,retain);
   TON_init__(&data__->TON4,retain);
+  CAN_INTERFACE_init__(&data__->CAN_INTERFACE0,retain);
+  BOOL_ON_WORD_init__(&data__->BOOL_ON_WORD0,retain);
   __INIT_LOCATED(BOOL,__IX0_3,data__->BTN_ON_1,retain)
   __INIT_LOCATED_VALUE(data__->BTN_ON_1,__BOOL_LITERAL(FALSE))
   __INIT_LOCATED(BOOL,__IX0_5,data__->BTN_ON_2,retain)
@@ -210,10 +444,12 @@ void MAIN_init__(MAIN *data__, BOOL retain) {
   __INIT_LOCATED_VALUE(data__->CMD_WORD,0)
   __INIT_LOCATED(WORD,__MW1,data__->CYRCLE_STATE,retain)
   __INIT_LOCATED_VALUE(data__->CYRCLE_STATE,0)
-  __INIT_VAR(data__->_TMP_EQ3776762_ENO,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->_TMP_EQ3776762_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->_TMP_EQ3354236_ENO,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->_TMP_EQ3354236_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_LOCATED(WORD,__MW2,data__->CAN_STATE,retain)
+  __INIT_LOCATED_VALUE(data__->CAN_STATE,0)
+  __INIT_VAR(data__->_TMP_EQ5689106_ENO,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->_TMP_EQ5689106_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->_TMP_EQ5766092_ENO,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->_TMP_EQ5766092_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->_TMP_EQ5859957_ENO,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->_TMP_EQ5859957_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->_TMP_EQ5545463_ENO,__BOOL_LITERAL(FALSE),retain)
@@ -238,29 +474,50 @@ void MAIN_init__(MAIN *data__, BOOL retain) {
   R_TRIG_init__(&data__->R_TRIG2,retain);
   R_TRIG_init__(&data__->R_TRIG3,retain);
   R_TRIG_init__(&data__->R_TRIG4,retain);
+  R_TRIG_init__(&data__->R_TRIG5,retain);
+  R_TRIG_init__(&data__->R_TRIG6,retain);
 }
 
 // Code part
 void MAIN_body__(MAIN *data__) {
   // Initialise TEMP variables
 
-  __SET_VAR(data__->,_TMP_EQ3776762_OUT,,__MAIN_EQ__BOOL__WORD1(
+  __SET_VAR(data__->CAN_INTERFACE0.,EN,,__BOOL_LITERAL(TRUE));
+  __SET_VAR(data__->CAN_INTERFACE0.,ID_FILTER,,300);
+  __SET_VAR(data__->CAN_INTERFACE0.,ID_STATE,,310);
+  __SET_VAR(data__->CAN_INTERFACE0.,STATE_PERIOD,,500);
+  __SET_VAR(data__->CAN_INTERFACE0.,INPUT_ADDRESS,,2);
+  __SET_VAR(data__->CAN_INTERFACE0.,NUM_OF_INPUT,,1);
+  __SET_VAR(data__->CAN_INTERFACE0.,OUTPUT_ADDRESS,,0);
+  __SET_VAR(data__->CAN_INTERFACE0.,NUM_OF_OUTPUT,,1);
+  CAN_INTERFACE_body__(&data__->CAN_INTERFACE0);
+  if (__GET_VAR(data__->CAN_INTERFACE0.ENO,)) {
+    __SET_VAR(data__->,CAN_ERR,,__GET_VAR(data__->CAN_INTERFACE0.ERR,));
+  };
+  __SET_VAR(data__->BOOL_ON_WORD0.,EN,,__BOOL_LITERAL(TRUE));
+  __SET_VAR(data__->BOOL_ON_WORD0.,B_IN0,,__GET_LOCATED(data__->K1,));
+  __SET_VAR(data__->BOOL_ON_WORD0.,B_IN1,,__GET_LOCATED(data__->K2,));
+  BOOL_ON_WORD_body__(&data__->BOOL_ON_WORD0);
+  if (__GET_VAR(data__->BOOL_ON_WORD0.ENO,)) {
+    __SET_LOCATED(data__->,CAN_STATE,,__GET_VAR(data__->BOOL_ON_WORD0.WORD_OUT,));
+  };
+  __SET_VAR(data__->,_TMP_EQ5689106_OUT,,__MAIN_EQ__BOOL__WORD1(
     (BOOL)__BOOL_LITERAL(TRUE),
     (UINT)2,
     (WORD)__GET_LOCATED(data__->CMD_WORD,),
     (WORD)1,
     data__));
-  __SET_VAR(data__->,_TMP_EQ3354236_OUT,,__MAIN_EQ__BOOL__WORD2(
-    (BOOL)__GET_VAR(data__->_TMP_EQ3776762_ENO,),
+  __SET_VAR(data__->,_TMP_EQ5766092_OUT,,__MAIN_EQ__BOOL__WORD2(
+    (BOOL)__GET_VAR(data__->_TMP_EQ5689106_ENO,),
     (UINT)2,
     (WORD)__GET_LOCATED(data__->CMD_WORD,),
     (WORD)2,
     data__));
-  if (__GET_VAR(data__->_TMP_EQ3776762_ENO,)) {
-    __SET_VAR(data__->,CMD_1,,__GET_VAR(data__->_TMP_EQ3776762_OUT,));
+  if (__GET_VAR(data__->_TMP_EQ5689106_ENO,)) {
+    __SET_VAR(data__->,CMD_1,,__GET_VAR(data__->_TMP_EQ5689106_OUT,));
   };
-  if (__GET_VAR(data__->_TMP_EQ3354236_ENO,)) {
-    __SET_VAR(data__->,CMD_2,,__GET_VAR(data__->_TMP_EQ3354236_OUT,));
+  if (__GET_VAR(data__->_TMP_EQ5766092_ENO,)) {
+    __SET_VAR(data__->,CMD_2,,__GET_VAR(data__->_TMP_EQ5766092_OUT,));
   };
   __SET_VAR(data__->,_TMP_EQ5859957_OUT,,__MAIN_EQ__BOOL__WORD3(
     (BOOL)__BOOL_LITERAL(TRUE),
@@ -371,12 +628,16 @@ void MAIN_body__(MAIN *data__) {
   R_TRIG_body__(&data__->R_TRIG1);
   __SET_VAR(data__->R_TRIG2.,CLK,,__GET_VAR(data__->BTN_ON_1_TMP,));
   R_TRIG_body__(&data__->R_TRIG2);
-  __SET_LOCATED(data__->,K1,,((!(__GET_VAR(data__->BTN_OFF_1_TMP,)) && !(__GET_LOCATED(data__->BTN_OFF_1,))) && ((__GET_LOCATED(data__->K1,) || __GET_VAR(data__->R_TRIG1.Q,)) || __GET_VAR(data__->R_TRIG2.Q,))));
-  __SET_VAR(data__->R_TRIG3.,CLK,,__GET_LOCATED(data__->BTN_ON_2,));
+  __SET_VAR(data__->R_TRIG3.,CLK,,__GET_VAR(data__->K1_CAN_ON,));
   R_TRIG_body__(&data__->R_TRIG3);
-  __SET_VAR(data__->R_TRIG4.,CLK,,__GET_VAR(data__->BTN_ON_2_TMP,));
+  __SET_LOCATED(data__->,K1,,(((!(__GET_VAR(data__->K1_CAN_OFF,)) && !(__GET_VAR(data__->BTN_OFF_1_TMP,))) && !(__GET_LOCATED(data__->BTN_OFF_1,))) && (((__GET_LOCATED(data__->K1,) || __GET_VAR(data__->R_TRIG1.Q,)) || __GET_VAR(data__->R_TRIG2.Q,)) || __GET_VAR(data__->R_TRIG3.Q,))));
+  __SET_VAR(data__->R_TRIG4.,CLK,,__GET_LOCATED(data__->BTN_ON_2,));
   R_TRIG_body__(&data__->R_TRIG4);
-  __SET_LOCATED(data__->,K2,,((!(__GET_VAR(data__->BTN_OFF_2_TMP,)) && !(__GET_LOCATED(data__->BTN_OFF_2,))) && ((__GET_LOCATED(data__->K2,) || __GET_VAR(data__->R_TRIG3.Q,)) || __GET_VAR(data__->R_TRIG4.Q,))));
+  __SET_VAR(data__->R_TRIG5.,CLK,,__GET_VAR(data__->BTN_ON_2_TMP,));
+  R_TRIG_body__(&data__->R_TRIG5);
+  __SET_VAR(data__->R_TRIG6.,CLK,,__GET_VAR(data__->K2_CAN_ON,));
+  R_TRIG_body__(&data__->R_TRIG6);
+  __SET_LOCATED(data__->,K2,,(((!(__GET_VAR(data__->K2_CAN_OFF,)) && !(__GET_VAR(data__->BTN_OFF_2_TMP,))) && !(__GET_LOCATED(data__->BTN_OFF_2,))) && (((__GET_LOCATED(data__->K2,) || __GET_VAR(data__->R_TRIG4.Q,)) || __GET_VAR(data__->R_TRIG5.Q,)) || __GET_VAR(data__->R_TRIG6.Q,))));
 
   goto __end;
 
