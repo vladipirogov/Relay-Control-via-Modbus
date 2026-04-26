@@ -1,0 +1,42 @@
+FUNCTION_BLOCK WORD_ON_BOOL
+VAR_INPUT
+	WORD_IN : word;
+END_VAR
+
+VAR_OUTPUT
+	B_OUT0 : bool;
+	B_OUT1 : bool;
+	B_OUT2 : bool;
+	B_OUT3 : bool;
+	B_OUT4 : bool;
+	B_OUT5 : bool;
+	B_OUT6 : bool;
+	B_OUT7 : bool;
+	B_OUT8 : bool;
+	B_OUT9 : bool;
+	B_OUT10 : bool;
+	B_OUT11 : bool;
+	B_OUT12 : bool;
+	B_OUT13 : bool;
+	B_OUT14 : bool;
+	B_OUT15 : bool;
+END_VAR
+
+B_OUT0  := (WORD_IN AND 16#0001) <> 0;
+B_OUT1  := (WORD_IN AND 16#0002) <> 0;
+B_OUT2  := (WORD_IN AND 16#0004) <> 0;
+B_OUT3  := (WORD_IN AND 16#0008) <> 0;
+B_OUT4  := (WORD_IN AND 16#0010) <> 0;
+B_OUT5  := (WORD_IN AND 16#0020) <> 0;
+B_OUT6  := (WORD_IN AND 16#0040) <> 0;
+B_OUT7  := (WORD_IN AND 16#0080) <> 0;
+B_OUT8  := (WORD_IN AND 16#0100) <> 0;
+B_OUT9  := (WORD_IN AND 16#0200) <> 0;
+B_OUT10 := (WORD_IN AND 16#0400) <> 0;
+B_OUT11 := (WORD_IN AND 16#0800) <> 0;
+B_OUT12 := (WORD_IN AND 16#1000) <> 0;
+B_OUT13 := (WORD_IN AND 16#2000) <> 0;
+B_OUT14 := (WORD_IN AND 16#4000) <> 0;
+B_OUT15 := (WORD_IN AND 16#8000) <> 0;
+
+END_FUNCTION_BLOCK
