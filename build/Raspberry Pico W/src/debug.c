@@ -222,15 +222,15 @@ size_t get_var_size(size_t idx)
         return 0;
     }
     switch (debug_vars[idx].type) {
-    case WORD_ENUM:
-    case WORD_O_ENUM:
-        return sizeof(WORD);
-    case INT_ENUM:
-        return sizeof(INT);
     case BOOL_ENUM:
     case BOOL_O_ENUM:
     case BOOL_P_ENUM:
         return sizeof(BOOL);
+    case INT_ENUM:
+        return sizeof(INT);
+    case WORD_ENUM:
+    case WORD_O_ENUM:
+        return sizeof(WORD);
     case TIME_ENUM:
         return sizeof(TIME);
     case SINT_ENUM:
@@ -245,14 +245,6 @@ void *get_var_addr(size_t idx)
     void *ptr = debug_vars[idx].ptr;
 
     switch (debug_vars[idx].type) {
-    case WORD_ENUM:
-        return (void *)&((__IEC_WORD_t *) ptr)->value;
-    case WORD_O_ENUM:
-        return (void *)((((__IEC_WORD_p *) ptr)->flags & __IEC_FORCE_FLAG)
-                        ? &(((__IEC_WORD_p *) ptr)->fvalue)
-                        : ((__IEC_WORD_p *) ptr)->value);
-    case INT_ENUM:
-        return (void *)&((__IEC_INT_t *) ptr)->value;
     case BOOL_ENUM:
         return (void *)&((__IEC_BOOL_t *) ptr)->value;
     case BOOL_O_ENUM:
@@ -260,6 +252,14 @@ void *get_var_addr(size_t idx)
         return (void *)((((__IEC_BOOL_p *) ptr)->flags & __IEC_FORCE_FLAG)
                         ? &(((__IEC_BOOL_p *) ptr)->fvalue)
                         : ((__IEC_BOOL_p *) ptr)->value);
+    case INT_ENUM:
+        return (void *)&((__IEC_INT_t *) ptr)->value;
+    case WORD_ENUM:
+        return (void *)&((__IEC_WORD_t *) ptr)->value;
+    case WORD_O_ENUM:
+        return (void *)((((__IEC_WORD_p *) ptr)->flags & __IEC_FORCE_FLAG)
+                        ? &(((__IEC_WORD_p *) ptr)->fvalue)
+                        : ((__IEC_WORD_p *) ptr)->value);
     case TIME_ENUM:
         return (void *)&((__IEC_TIME_t *) ptr)->value;
     case SINT_ENUM:
@@ -276,24 +276,6 @@ void force_var(size_t idx, bool forced, void *val)
     if (forced) {
         size_t var_size = get_var_size(idx);
         switch (debug_vars[idx].type) {
-        case WORD_ENUM: {
-            memcpy(&((__IEC_WORD_t *) ptr)->value, val, var_size);
-            ((__IEC_WORD_t *) ptr)->flags |= __IEC_FORCE_FLAG;
-            break;
-        }
-    
-        case WORD_O_ENUM: {
-            memcpy((((__IEC_WORD_p *) ptr)->value), val, var_size);
-            memcpy(&((__IEC_WORD_p *) ptr)->fvalue, val, var_size);
-            ((__IEC_WORD_p *) ptr)->flags |= __IEC_FORCE_FLAG;
-            break;
-        }
-        case INT_ENUM: {
-            memcpy(&((__IEC_INT_t *) ptr)->value, val, var_size);
-            ((__IEC_INT_t *) ptr)->flags |= __IEC_FORCE_FLAG;
-            break;
-        }
-    
         case BOOL_ENUM: {
             memcpy(&((__IEC_BOOL_t *) ptr)->value, val, var_size);
             ((__IEC_BOOL_t *) ptr)->flags |= __IEC_FORCE_FLAG;
@@ -309,6 +291,24 @@ void force_var(size_t idx, bool forced, void *val)
         case BOOL_P_ENUM: {
             memcpy(&((__IEC_BOOL_p *) ptr)->fvalue, val, var_size);
             ((__IEC_BOOL_p *) ptr)->flags |= __IEC_FORCE_FLAG;
+            break;
+        }
+        case INT_ENUM: {
+            memcpy(&((__IEC_INT_t *) ptr)->value, val, var_size);
+            ((__IEC_INT_t *) ptr)->flags |= __IEC_FORCE_FLAG;
+            break;
+        }
+    
+        case WORD_ENUM: {
+            memcpy(&((__IEC_WORD_t *) ptr)->value, val, var_size);
+            ((__IEC_WORD_t *) ptr)->flags |= __IEC_FORCE_FLAG;
+            break;
+        }
+    
+        case WORD_O_ENUM: {
+            memcpy((((__IEC_WORD_p *) ptr)->value), val, var_size);
+            memcpy(&((__IEC_WORD_p *) ptr)->fvalue, val, var_size);
+            ((__IEC_WORD_p *) ptr)->flags |= __IEC_FORCE_FLAG;
             break;
         }
         case TIME_ENUM: {
@@ -328,21 +328,21 @@ void force_var(size_t idx, bool forced, void *val)
         }
     } else {
         switch (debug_vars[idx].type) {
-        case WORD_ENUM:
-            ((__IEC_WORD_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
-            break;
-        case WORD_O_ENUM:
-            ((__IEC_WORD_p *) ptr)->flags &= ~__IEC_FORCE_FLAG;
-            break;
-        case INT_ENUM:
-            ((__IEC_INT_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
-            break;
         case BOOL_ENUM:
             ((__IEC_BOOL_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
             break;
         case BOOL_O_ENUM:
         case BOOL_P_ENUM:
             ((__IEC_BOOL_p *) ptr)->flags &= ~__IEC_FORCE_FLAG;
+            break;
+        case INT_ENUM:
+            ((__IEC_INT_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
+            break;
+        case WORD_ENUM:
+            ((__IEC_WORD_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;
+            break;
+        case WORD_O_ENUM:
+            ((__IEC_WORD_p *) ptr)->flags &= ~__IEC_FORCE_FLAG;
             break;
         case TIME_ENUM:
             ((__IEC_TIME_t *) ptr)->flags &= ~__IEC_FORCE_FLAG;

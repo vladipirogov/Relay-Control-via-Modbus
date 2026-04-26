@@ -28,10 +28,11 @@ const int CAN_INT_PIN = 20;
 static volatile bool    _rx_ready = false;
 static volatile uint8_t _rx_buf[8];
 static volatile int     _rx_len   = 0;
-static long _id_filter_cached     = 300;
 
 void onReceive(int packetSize) {
-    if (packetSize < 1 || CAN.packetRtr() || CAN.packetId() != _id_filter_cached) {
+    // Hardware filter (CAN.filter) already ensures only ID_FILTER frames arrive.
+    // Discard RTR frames and empty frames — they carry no payload.
+    if (packetSize < 1 || CAN.packetRtr()) {
         while (CAN.available()) CAN.read();
         return;
     }
@@ -44,8 +45,6 @@ void onReceive(int packetSize) {
 }
 
 void setup() {
-    _id_filter_cached = ID_FILTER;
-
     CAN.setPins(CAN_CS_PIN, CAN_INT_PIN);
     CAN.setClockFrequency(8E6);
 
@@ -54,6 +53,9 @@ void setup() {
         return;
     }
 
+    // Hardware ID filter: only frames with exactly ID_FILTER pass to onReceive.
+    // mask 0x7FF = all 11 standard-ID bits must match.
+    CAN.filter(ID_FILTER, 0x7FF);
     CAN.onReceive(onReceive);
 }
 
