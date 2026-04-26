@@ -32,24 +32,6 @@
         "protocol": "modbus-tcp"
       }
     ],
-    "debugVariables": {
-      "pous": {
-        "main": [
-          "BTN_ON_1",
-          "BTN_ON_1_TMP",
-          "BTN_ON_2",
-          "BTN_ON_2_TMP",
-          "K1",
-          "K2",
-          "BTN_OFF_1",
-          "BTN_OFF_1_TMP",
-          "BTN_OFF_2",
-          "BTN_OFF_2_TMP",
-          "CMD_WORD",
-          "CYRCLE_STATE"
-        ]
-      }
-    },
     "deletedPous": [],
     "deletedServers": [],
     "deletedRemoteDevices": []

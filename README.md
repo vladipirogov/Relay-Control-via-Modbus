@@ -25,6 +25,7 @@ This project demonstrates how to:
 | RS485 CAN HAT (Waveshare) | CAN bus (MCP2515) + Modbus RS485 (SP3485/MAX485) |
 | SRD-05VDC-SL-C relay modules (K1, K2) | Controlled output devices |
 | STM32-IHM03 (NUCLEO-G431RB) | PMSM motor control via CAN bus |
+| MCP2515 CAN module (3.3V-compatible) | Connects Pico W to the CAN bus via SPI |
 | Modbus module MAX485 | Connects Pico W to the RS485 bus |
 
 > The RS485 CAN HAT is described at [waveshare.com/wiki/RS485_CAN_HAT](https://www.waveshare.com/wiki/RS485_CAN_HAT).
@@ -43,6 +44,22 @@ Output relays and input signals used in this project:
 | K1 OFF input | `%IX0.4` | GP10 | Turn OFF K1 |
 | K2 ON input | `%IX0.5` | GP11 | Turn ON K2 |
 | K2 OFF input | `%IX0.6` | GP12 | Turn OFF K2 |
+
+### MCP2515 → Pico W SPI Pin Mapping
+
+The CAN_INTERFACE block uses SPI0 with the following wiring:
+
+| MCP2515 Pin | Pico GPIO | Pico Physical Pin | Note |
+|-------------|-----------|-------------------|------|
+| VCC | 3V3 | Pin 36 | Use 3.3V-compatible module |
+| GND | GND | Pin 38 | |
+| CS | GP17 | Pin 22 | Chip Select |
+| SO (MISO) | GP16 | Pin 21 | SPI0 RX |
+| SI (MOSI) | GP19 | Pin 25 | SPI0 TX |
+| SCK | GP18 | Pin 24 | SPI0 SCK |
+| INT | GP20 | Pin 26 | Interrupt |
+
+> **Note:** Many MCP2515 modules are 5V-only. Use a 3.3V-compatible module or replace the CAN transceiver (TJA1050 → SN65HVD230 or similar).
 
 ### Modbus Register Map (RP2040)
 
@@ -147,6 +164,50 @@ Each step uses a **TON** (On-Delay Timer) block with `PT = T#2s`.
 
 ---
 
+## CAN_INTERFACE Function Block
+
+A custom C++ function block (`pous/function-blocks/CAN_INTERFACE.cpp`) bridges the CAN bus with the OpenPLC `%MW` memory image. This allows any PLC program or Modbus master to exchange data with CAN-connected devices (e.g., the STM32-IHM03 motor controller).
+
+### Block Variables
+
+| Variable | Direction | Type | Description | Default |
+|----------|-----------|------|-------------|----------|
+| `ID_FILTER` | Input | `INT` | CAN ID of frames to receive | `300` (0x12C) |
+| `ID_STATE` | Input | `INT` | CAN ID for periodic TX frames | `310` (0x136) |
+| `STATE_PERIOD` | Input | `INT` | TX interval, ms | `500` |
+| `INPUT_ADDRESS` | Input | `INT` | First `%MW` index packed into TX frame | `2` |
+| `NUM_OF_INPUT` | Input | `INT` | Number of `%MW` words sent in TX frame | `2` |
+| `OUTPUT_ADDRESS` | Input | `INT` | First `%MW` index written from RX frame | `0` |
+| `NUM_OF_OUTPUT` | Input | `INT` | Number of `%MW` words decoded from RX frame | `2` |
+| `ERR` | Output | `BOOL` | `TRUE` if CAN init failed | `FALSE` |
+
+> All addresses are indices into `int_memory[]` (maps to `%MW0`–`%MW19`). The array has 20 slots — addresses 20+ are out of bounds.
+
+### CAN Message Protocol
+
+Payload is packed as little-endian `uint16_t` words:
+
+```
+Bytes: [lo0] [hi0] [lo1] [hi1] ...
+         └─── %MW{OUTPUT_ADDRESS} ───┘  └─── %MW{OUTPUT_ADDRESS+1} ───┘
+```
+
+Example — send two words to Pico W (`OUTPUT_ADDRESS=0`, `NUM_OF_OUTPUT=2`):
+
+```bash
+cansend can0 12C#01000200   # %MW0 = 1,  %MW1 = 2
+```
+
+The block also broadcasts current `%MW` values on `ID_STATE` every `STATE_PERIOD` ms, so remote nodes can read PLC state without polling Modbus.
+
+### Architecture Note
+
+OpenPLC does not implement IEC 61131-3 pointers or indirect addressing — `POINTER TO` and `ADR()` are not available in Ladder/ST programs. As a workaround, `INPUT_ADDRESS` and `OUTPUT_ADDRESS` are plain `INT` values; indirect addressing is performed in C++ via `*int_memory[idx]`.
+
+CAN reception uses an interrupt-driven callback (`onReceive`) that writes to a staging buffer (`_rx_buf`). The actual write to `int_memory[]` happens in `loop()` each scan cycle, keeping interrupt context minimal and avoiding macro scope issues — PLC variable macros (`OUTPUT_ADDRESS`, etc.) dereference through a `vars` pointer that is only in scope inside `setup()`/`loop()`.
+
+---
+
 ## RS485 CAN HAT Setup on Orange Pi 4 Pro
 
 ### CAN bus (MCP2515)
@@ -191,6 +252,8 @@ Steps:
 ## Known Limitations (OpenPLC v4)
 
 - **Bit memory markers** (`%MX`) are not yet implemented — use `%MW` + EQ comparisons as a workaround.
+- **Pointers / indirect addressing** (`POINTER TO`, `ADR()`) are not implemented in OpenPLC Editor — use C++ function blocks with `int_memory[]` indexing as a workaround.
+- **`%MW` address space is limited to 20 words** (indices 0–19 for Pico W). Addresses `%MW20+` cannot be used via `int_memory[]`.
 - Modbus RTU Slave behaviour can be inconsistent in some edge cases; monitor the [OpenPLC forum](https://openplc.discussion.community/) for updates.
 - This is a DIY prototype, **not** a production-grade PLC: no EMC shielding, no hardware watchdog, no industrial connectors.
 
