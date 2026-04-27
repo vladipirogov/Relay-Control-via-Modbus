@@ -727,13 +727,6 @@ END_VAR
                 }
               },
               {
-                "handleId": "NUM_OF_INPUT",
-                "type": "input",
-                "variable": {
-                  "name": "1"
-                }
-              },
-              {
                 "handleId": "NUM_OF_OUTPUT",
                 "type": "input",
                 "variable": {
@@ -749,6 +742,13 @@ END_VAR
               },
               {
                 "handleId": "INPUT_ADDRESS",
+                "type": "input",
+                "variable": {
+                  "name": "1"
+                }
+              },
+              {
+                "handleId": "NUM_OF_INPUT",
                 "type": "input",
                 "variable": {
                   "name": "2"
@@ -1183,7 +1183,7 @@ END_VAR
             },
             "numericId": "4400284",
             "variable": {
-              "name": "2"
+              "name": "1"
             },
             "executionOrder": 0,
             "variant": "input",
@@ -1273,7 +1273,7 @@ END_VAR
             },
             "numericId": "4261158",
             "variable": {
-              "name": "1"
+              "name": "2"
             },
             "executionOrder": 0,
             "variant": "input",
