@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
-  <fileHeader companyName="Unknown" productName="Unnamed" productVersion="1" creationDateTime="2026-04-27T09:11:45"/>
-  <contentHeader name="Unnamed" modificationDateTime="2026-04-27T09:11:45">
+  <fileHeader companyName="Unknown" productName="Unnamed" productVersion="1" creationDateTime="2026-04-27T09:34:51"/>
+  <contentHeader name="Unnamed" modificationDateTime="2026-04-27T09:34:51">
     <coordinateInfo>
       <fbd>
         <scaling x="16" y="16"/>
@@ -2445,6 +2445,20 @@ B_OUT15 := (WORD_IN AND 16#8000) <> 0;]]></xhtml:p>
                 <relPosition x="80" y="16"/>
               </connectionPointOut>
               <expression>K2</expression>
+            </inVariable>
+            <inVariable localId="6538114" width="80" height="32" negated="false">
+              <position x="33" y="528"/>
+              <connectionPointOut>
+                <relPosition x="80" y="16"/>
+              </connectionPointOut>
+              <expression>CYCLE_RUN_SET</expression>
+            </inVariable>
+            <inVariable localId="6020531" width="80" height="32" negated="false">
+              <position x="33" y="1048"/>
+              <connectionPointOut>
+                <relPosition x="80" y="16"/>
+              </connectionPointOut>
+              <expression>CYCLE_RUN</expression>
             </inVariable>
             <inVariable localId="4260701" width="80" height="32" negated="false">
               <position x="33" y="1182"/>

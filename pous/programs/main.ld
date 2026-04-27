@@ -2717,6 +2717,38 @@ END_VAR
                   "documentation": "",
                   "debug": false
                 }
+              },
+              {
+                "handleId": "B_IN15",
+                "type": "input",
+                "variable": {
+                  "name": "CYCLE_RUN",
+                  "class": "local",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "bool"
+                  },
+                  "location": "",
+                  "initialValue": null,
+                  "documentation": "",
+                  "debug": false
+                }
+              },
+              {
+                "handleId": "B_IN2",
+                "type": "input",
+                "variable": {
+                  "name": "CYCLE_RUN_SET",
+                  "class": "local",
+                  "type": {
+                    "definition": "base-type",
+                    "value": "bool"
+                  },
+                  "location": "",
+                  "initialValue": null,
+                  "documentation": "",
+                  "debug": false
+                }
               }
             ],
             "draggable": true,
@@ -3068,7 +3100,16 @@ END_VAR
             },
             "numericId": "6538114",
             "variable": {
-              "name": ""
+              "name": "CYCLE_RUN_SET",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
             },
             "executionOrder": 0,
             "variant": "input",
@@ -4186,7 +4227,16 @@ END_VAR
             },
             "numericId": "6020531",
             "variable": {
-              "name": ""
+              "name": "CYCLE_RUN",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
             },
             "executionOrder": 0,
             "variant": "input",
@@ -9191,7 +9241,16 @@ END_VAR
             },
             "numericId": "5448073",
             "variable": {
-              "name": "CYCLE_RUN"
+              "name": "CYCLE_RUN",
+              "class": "local",
+              "type": {
+                "definition": "base-type",
+                "value": "bool"
+              },
+              "location": "",
+              "initialValue": null,
+              "documentation": "",
+              "debug": false
             },
             "executionOrder": 0,
             "draggable": true,

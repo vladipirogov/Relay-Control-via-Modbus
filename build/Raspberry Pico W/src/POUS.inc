@@ -500,6 +500,8 @@ void MAIN_body__(MAIN *data__) {
   __SET_VAR(data__->BOOL_ON_WORD0.,EN,,__BOOL_LITERAL(TRUE));
   __SET_VAR(data__->BOOL_ON_WORD0.,B_IN0,,__GET_LOCATED(data__->K1,));
   __SET_VAR(data__->BOOL_ON_WORD0.,B_IN1,,__GET_LOCATED(data__->K2,));
+  __SET_VAR(data__->BOOL_ON_WORD0.,B_IN2,,__GET_VAR(data__->CYCLE_RUN_SET,));
+  __SET_VAR(data__->BOOL_ON_WORD0.,B_IN15,,__GET_VAR(data__->CYCLE_RUN,));
   BOOL_ON_WORD_body__(&data__->BOOL_ON_WORD0);
   if (__GET_VAR(data__->BOOL_ON_WORD0.ENO,)) {
     __SET_LOCATED(data__->,CAN_STATE,,__GET_VAR(data__->BOOL_ON_WORD0.WORD_OUT,));
